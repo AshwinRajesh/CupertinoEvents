@@ -11,30 +11,65 @@
 </head>
 <body>
 
-<div class="jumbotron text-center">
-  <h1>My First Bootstrap Page</h1>
-  <p>Resize this responsive page to see the effect!</p> 
-</div>
-  
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Column 1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+  <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html"><strong>Cupertino Events</strong></a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html" style="font-size: 22px">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup.html" style="font-size: 22px">Signup</a>
+        </li>
+      </ul>
     </div>
-    <div class="col-sm-4">
-      <h3>Column 2</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Column 3</h3>        
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
+  </nav>
+
+  <div class="jumbotron text-center" style="margin-top:50px">
+    <h1>Cupertino Events</h1>
+    <p>Resize this responsive page to see the effect!</p> 
   </div>
-</div>
+    
+  <div class="container bg">
+    <div class="container p-5 my-5 border" style="background-color: #4e89ed">
+      <div class="row">
+
+        <div class="col-sm-8">
+          <h2 style="color: white">Find Events</h2>
+          <p style = "font-size: 16px; color: white">Look for ongoing and future events all around Cupertino using a clean map interface.</p>
+        </div>
+
+        <div class="col-sm-4">
+            <img src="map.png" class="rounded float-right" width=100px height=100px>
+        </div>
+      </div>
+
+    </div>
+    <div class="container p-5 my-5 border">
+      <div class="row">
+        <div class="col-sm-4">
+            <img src="line-chart.png" class="rounded" width=100px height=100px>
+        </div>
+        <div class="col-sm-8">
+          <h2 class="text-right" style="color: #4e89ed">Earn Points</h2>
+          <p class="text-right" style = "font-size: 16px; color: #4e89ed">Accumulate points by attending events around Cupertino.</p>
+        </div>
+      </div>
+    </div>
+    <div class="container p-5 my-5 border" style="background-color: #4e89ed">
+      <div class="row">
+        <div class="col-sm-8">
+          <h2 style="color: white">Receive Great Prizes!</h2>
+          <p style = "color: white; font-size: 16px">You can use your earned points to receive small rewards or enter raffles for larger prizes.</p>
+        </div>
+
+        <div class="col-sm-4">
+            <img src="gift.png" class="float-right rounded" width=100px height=100px>
+        </div>
+      </div>
+  </div>
 
 </body>
 </html>

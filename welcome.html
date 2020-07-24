@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html"><strong>Cupertino Events</strong></a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="welcome.html" style="font-size: 22px">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="login.html" style="font-size: 22px">Map</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup.html" style="font-size: 22px">Sign Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="jumbotron text-center" style="margin-top:50px">
+    <h1>Welcome!</h1>
+    <p>Create an account in under a minute!</p> 
+  </div>
+    
+  <div class="container bg">
+    <h2>Profile</h2>
+    <div class="container p-4 my-5">
+      
+      <div class="row">
+
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="p-2" style="width:100px">
+              <img src="map.png" class="img-fluid rounded-circle border">
+            </div>
+            <div class="col-sm-4 p-2">
+              <h3>John Doe</h3>
+              <p>Cupertino, CA</p>
+            </div>
+          </div>
+          <div class="row p-2">
+            <table class="table table-bordered" style="margin-right:20px">
+              <tbody>
+                <tr>
+                  <td style="color: #4e89ed"><strong>Points</strong></td>
+                  <td style="background-color: #4e89ed; color: white">2000</td>
+                </tr>
+                <tr>
+                  <td style="color: #4e89ed"><strong>Events Attended</strong></td>
+                  <td style="background-color: #4e89ed; color: white">5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-sm-6 p-2">
+          <h3 style="margin-bottom: 20px">Recent Events</h3>
+          <ul class="list-group" style="overflow: scroll; max-height: 300px">
+            <a href="#" class="list-group-item list-group-item-action">First item</a>
+            <a href="#" class="list-group-item list-group-item-action">Second item</a>
+            <a href="#" class="list-group-item list-group-item-action">Third item</a>
+            <a href="#" class="list-group-item list-group-item-action">First item</a>
+            <a href="#" class="list-group-item list-group-item-action">Second item</a>
+            <a href="#" class="list-group-item list-group-item-action">Third item</a>
+            <a href="#" class="list-group-item list-group-item-action">First item</a>
+            <a href="#" class="list-group-item list-group-item-action">Second item</a>
+            <a href="#" class="list-group-item list-group-item-action">Third item</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
