@@ -8,9 +8,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="map.js"></script>
+  <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAQdwnCzYyrcMnPhYaIEToVEYUfio6GcEk&callback=initMap" defer></script>
 </head>
 <body>
-
   <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -18,37 +19,27 @@
       </div>
       <ul class="nav navbar-nav navbar-right">
         <li class="nav-item">
-          <a class="nav-link" href="login.html" style="font-size: 22px">Login</a>
+          <a class="nav-link" href="welcome.html" style="font-size: 22px">My Account</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="signup.html" style="font-size: 22px">Signup</a>
+          <a class="nav-link" href="map.html" style="font-size: 22px">Map</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup.html" style="font-size: 22px">Sign Out</a>
         </li>
       </ul>
     </div>
   </nav>
 
   <div class="jumbotron text-center" style="margin-top:50px">
-    <h1>Login</h1>
-    <p>Resize this responsive page to see the effect!</p> 
+    <h1>Find Events</h1>
+    <p>Map map map map</p> 
   </div>
     
   <div class="container bg">
-    <form>
-      <div class="form-group">
-        <label for="email" style = "font-size: 20px; color: #4e89ed">Email Address</label>
-        <input type="email" class="form-control" placeholder="Enter email" id="email">
-      </div>
-      <div class="form-group">
-        <label for="pwd" style = "font-size: 20px; color: #4e89ed">Password</label>
-        <input type="password" class="form-control" placeholder="Enter password" id="pwd">
-      </div>
-      <div class="form-group form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox"> Remember me
-        </label>
-      </div>
-      <button type="submit" class="btn btn-primary">Enter</button>
-    </form>
+    <div class="container p-1">
+      <div id = "map" style="height:400px"></div>
+    </div>
   </div>
 
 </body>
