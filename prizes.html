@@ -33,7 +33,7 @@
   </div>
     
   <div class="container bg">
-    <h3>Points: 1000</h3>
+    <h3 id = "points-label">Points: 1000</h3>
     <div class="container p-1" id="prizes">
     </div>
   </div>
@@ -64,6 +64,7 @@
     }]
 
     var myPoints = 1000;
+   
 
     function purchase(button) {
       var n = button.id;
@@ -78,11 +79,12 @@
         prize.purchased = true;
         myPoints -= prize.points;
         button.innerHTML = "Purchased!";
-        console.log(myPoints);
+        document.getElementById("points-label").innerHTML = "Points: " + myPoints;
       }
     }
 
     window.onload = function() {
+      document.getElementById("points-label").innerHTML = "Points: " + myPoints;
       var prizeContainer = document.getElementById("prizes");
       for (var i = 0; i < prizes.length; i++) {
         var row = document.createElement("div");
