@@ -29,6 +29,9 @@ function formatDate(date) {
 }
 
 
+function checkin(id) {
+	checkInToEvent(id);
+}
 
 
 function addMarker(lat, lng, title, description, start, end, id) {
@@ -57,7 +60,7 @@ function addMarker(lat, lng, title, description, start, end, id) {
 		      '<div id="bodyContent">'+
 		      '<p style="font-size: 16px">' + description + '</p>'+ 
 		      '<p style="font-size: 16px">' + 'Ongoing until ' + formatDate(end) + '</p>'+
-		      '<button id="' + id + '_button" class="btn btn-primary">Check In</button>' +
+			  '<button onclick = "checkin(id)" id="' + id + '" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	} else {
@@ -68,7 +71,7 @@ function addMarker(lat, lng, title, description, start, end, id) {
 		      '<div id="bodyContent">'+
 		      '<p style="font-size: 16px">' + description + '</p>' +
 		      '<p style="font-size: 16px">' + formatDate(start) + ' to ' + formatDate(end) + '</p>' +
-		      '<button id="' + id + '_button" class="btn btn-primary">Check In</button>' +
+		      '<button onclick = "checkin(id)" id="' + id + 'h" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	}
@@ -76,6 +79,11 @@ function addMarker(lat, lng, title, description, start, end, id) {
 	  		content: contentString
 	  	});
     	infoWindow.open(map, marker);
-		
+		/*console.log(document.getElementById(id + "_button_map").innerHTML);
+		$("#" + id + "_button_map").on("click", function() {
+			alert("Hello");
+			//checkInToEvent(key);
+		});*/
   	});
+
 }

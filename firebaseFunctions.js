@@ -13,8 +13,8 @@ $( document ).ready(function() {
 
     const dbRefObject = firebase.database().ref().child("events");
     dbRefObject.on("child_added", snap => {console.log("Added!"); addEventElement(snap); console.log(snap.val())});
-    dbRefObject.on("child_removed", snap => {console.log("Removed!"); console.log(snap.val())});
-    dbRefObject.on("child_changed", snap => {console.log("Changed!"); console.log(snap.val())});
+    dbRefObject.on("child_removed", snap => {console.log("Removed!"); removeEventElement(snap); console.log(snap.val())});
+    dbRefObject.on("child_changed", snap => {console.log("Changed!"); removeEventElement(snap); addEventElement(snap); console.log(snap.val())});
 
     const prizeRef = firebase.database().ref().child("prizes");
     prizeRef.on("child_added", snap => {console.log("Added!"); loadPrize(snap); console.log(snap.val())});
@@ -227,7 +227,7 @@ function addEventElement(snap){
     console.log(obj);
     var start = new Date(obj.start_time);
     var end = new Date(obj.end_time);
-    $("#eventList").append("<li class=\"list-group-item\">\n" +
+    $("#eventList").append("<li id=\"" + obj.key + "_main\"class=\"list-group-item\">\n" +
         "            <h3>" + obj.name + " <span style='color: #4e89ed'>" + obj.point_value + "pts</span></h3>\n" +
         "            <h5>" + obj.notes + "</h5>\n" +
         "            <h6>" + formatDate(start) + " to " + formatDate(end) + "</h6>\n" +    
@@ -236,10 +236,18 @@ function addEventElement(snap){
 
     var key = obj.key;
     var points = obj.point_value;
+    addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
+
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
     });
-    addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
+    
+}
+
+function removeEventElement(snap){
+    obj = snap.val();
+    console.log(obj);
+    $("#" + obj.key + "_main").remove();
 }
 
 function buttonClick(){
