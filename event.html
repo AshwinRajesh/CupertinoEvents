@@ -51,7 +51,7 @@
         <textarea type="Description" class="form-control" placeholder="ex. John Doe" id="event_description" style="height: 100px"></textarea>
       </div>
       <div class="form-group">
-        <label for="datetime" style = "font-size: 20px; color: #4e89ed">Date-Time Range</label>
+        <label for="datetime" style = "font-size: 20px; color: #4e89ed">Dates and Times</label>
         <input type="text" class="form-control" name="datetimes" id="datetime"/>
       </div>
       <label for="event_points_slide" style = "font-size: 20px; color: #4e89ed; display:block">Points</label>
@@ -60,9 +60,9 @@
       
     </form>
 
-    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px" id="event_save_button">Save</button>
-    <a type="submit" class="btn btn-primary" style="margin-bottom: 20px" href="admin-events.html">Close</a>
-    <button type="submit" class="btn btn-danger" style="margin-bottom: 20px">Delete Event</button>
+    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" id="event_save_button">Save</button>
+    <a type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" href="admin-events.html">Close</a>
+    <button type="submit" class="btn btn-danger" style="margin-bottom: 20px; margin-top: 20px">Delete Event</button>
 
   </div>
   <script>
@@ -77,79 +77,12 @@
       return (hour + ":" + minute + ampm);
     }
 
-    var smonthSelect = document.getElementById("smonth");
-    var emonthSelect = document.getElementById("emonth");
-    for (var i = 0; i < monthNames.length; i++) {
-        var soption = document.createElement("option");
-        soption.value = monthNames[i];
-        soption.innerHTML = monthNames[i];
-        var eoption = document.createElement("option");
-        eoption.value = monthNames[i];
-        eoption.innerHTML = monthNames[i];
-        smonthSelect.appendChild(soption);
-        emonthSelect.appendChild(eoption);
-    }
-
-    var syearSelect = document.getElementById("syear");
-    var eyearSelect = document.getElementById("eyear");
-    for (var i = 2020; i < 2041; i++) {
-        var soption = document.createElement("option");
-        soption.value = i + "";
-        soption.innerHTML = i + "";
-        var eoption = document.createElement("option");
-        eoption.value = i + "";
-        eoption.innerHTML = i + "";
-        syearSelect.appendChild(soption);
-        eyearSelect.appendChild(eoption);
-    }
-
-
-    var sdateSelect = document.getElementById("sdate");
-    var edateSelect = document.getElementById("edate");
-    for (var i = 1; i < 32; i++) {
-        var soption = document.createElement("option");
-        soption.value = i + "";
-        soption.innerHTML = i + "";
-        var eoption = document.createElement("option");
-        eoption.value = i + "";
-        eoption.innerHTML = i + "";
-        sdateSelect.appendChild(soption);
-        edateSelect.appendChild(eoption);
-    }
-
-    var stimeSelect = document.getElementById("stime");
-    var etimeSelect = document.getElementById("etime");
-    for (var i = 0; i < 96; i++) {
-        var soption = document.createElement("option");
-        var timeStr = decodeTime(i * 15);
-        soption.value = timeStr;
-        soption.innerHTML = timeStr;
-        var eoption = document.createElement("option");
-        eoption.value = timeStr;
-        eoption.innerHTML = timeStr;
-        stimeSelect.appendChild(soption);
-        etimeSelect.appendChild(eoption);
-    }
-
     function updateLabel() {
         var slider = document.getElementById("event_points_slide");
         var label = document.getElementById("points-label");
 
         label.innerHTML = slider.value;
     }
-
-
-    /*function numDays(Time, year) {
-      switch(Time) {
-        case "February":
-          return (year % 4 == 0 && year % 100 != 0 && year % 400 == 0) ? 29 : 28;
-        case "January", "March", "May", "July", "August", "October", "December":
-          return 31;
-        default:
-          return 30;
-      }
-    }*/
-
 
 
   </script>

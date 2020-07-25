@@ -30,12 +30,16 @@ $( document ).ready(function() {
     });
 
     //Login
-    /*$("#login_button").on("click", function() {
-        loginWithEmail($("#login_email").val(), $("#login_email").val());
-    });*/
+    $("#login_button").on("click", function() {
+        loginWithEmail($("#login_email").val(), $("#login_pwd").val());
+    });
     $("#signup_button").on("click", function() {
         
         signupWithEmail($("#signup_username").val(),$("#signup_email").val(), $("#signup_pwd").val());
+    });
+
+    $("#sign_out").on("click", function() {
+        logOut();
     });
 
     $('input[name="datetimes"]').daterangepicker({
@@ -43,7 +47,7 @@ $( document ).ready(function() {
         startDate: moment().startOf('hour'),
         endDate: moment().startOf('hour').add(32, 'hour'),
         locale: {
-            format: 'M/DD hh:mm A'
+            format: 'M/DD/YYYY hh:mm A'
         }
     }, function(start, end, label) {
         event_create_start = start.valueOf();
