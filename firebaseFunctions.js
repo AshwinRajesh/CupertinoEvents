@@ -103,7 +103,7 @@ function signupWithEmail(username, email, password){
             name: username,
             uid: user.uid,
             points: 0,
-            user_events: []
+            user_events: {placeholder: 0}
         }, function(error) {
             if (error) {
                 console.log(error.message);
@@ -169,7 +169,7 @@ function checkInToEvent(eventKey){
                     console.log("Data saved successfully!");
                 }
             });
-            generateAlert("#map_alerts", "success", "Success!\nYou gained " + points + "points!");
+            generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
         }
     });
 }
