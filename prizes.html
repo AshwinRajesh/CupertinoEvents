@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html"><strong>Cupertino Events</strong></a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html" style="font-size: 22px">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup.html" style="font-size: 22px">Signup</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="jumbotron text-center" style="margin-top:50px">
+    <h1>Rewards</h1>
+    <p>Turn-in points for hard-earned prizes!</p> 
+  </div>
+    
+  <div class="container bg">
+    <h3>Points: 1000</h3>
+    <div class="container p-1" id="prizes">
+    </div>
+  </div>
+  <style>
+    .points {
+      text-align: right;
+      color: white;
+    }
+    .date {
+      font-size: 16px;
+      color: white;
+    }
+    .title {
+      color: white;
+    }
+  </style>
+  <script>
+    const prizes = [{
+      name: "Nintendo Switch", 
+      date: new Date("July 31 2020 0:00:00"), 
+      points: 3000,
+      purchased: false
+    }, {
+      name: "Bagel", 
+      date: new Date("July 26 2020 0:00:00"), 
+      points: 200,
+      purchased: false
+    }]
+
+    var myPoints = 1000;
+
+    function purchase(button) {
+      var n = button.id;
+      var prize;
+      for (var i = 0; i < prizes.length; i++) {
+        if (prizes[i].name == n) {
+          prize = prizes[i];
+          break;
+        }
+      }
+      if (myPoints > prize.points && !prize.purchased) {
+        prize.purchased = true;
+        myPoints -= prize.points;
+        button.innerHTML = "Purchased!";
+        console.log(myPoints);
+      }
+    }
+
+    window.onload = function() {
+      var prizeContainer = document.getElementById("prizes");
+      for (var i = 0; i < prizes.length; i++) {
+        var row = document.createElement("div");
+        row.className = "row p-5 my-4";
+        row.style = "background-color: #4e89ed";
+        
+        var col1 = document.createElement("div");
+        col1.className = "col-sm-8";
+        
+        var title = document.createElement("h2");
+        title.className = "title";
+        title.innerHTML = prizes[i].name;
+        
+        var date = document.createElement("p");
+        date.className = "date";
+        var d = prizes[i].date;
+        date.innerHTML = "Until " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + ".";
+        
+        var col2 = document.createElement("div");
+        col2.className = "col-sm-4";
+
+        var pts = document.createElement("h1");
+        pts.innerHTML = prizes[i].points + " pts";
+        pts.className = "points";
+
+        col2.appendChild(pts);
+
+        var button = document.createElement("button");
+        button.innerHTML = "Purchase";
+        button.className = "btn btn-light";
+        button.type = "button";
+        button.id = prizes[i].name;
+        button.addEventListener("click", function() {
+          purchase(this);
+        });
+
+        col1.appendChild(title);
+        col1.appendChild(date);
+        col1.appendChild(button);
+
+        row.appendChild(col1);
+        row.appendChild(col2);
+
+        prizeContainer.appendChild(row);
+
+      }
+    }
+  </script>
+</body>
+</html>
