@@ -8,6 +8,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-database.js"></script>
+  <script type="text/javascript" src="firebaseFunctions.js"></script>
 </head>
 <body>
 
@@ -40,7 +44,7 @@
     
   <div class="container bg">
     <a type="button" class="btn btn-primary" href="edit-prize.html">Add Prize</a>
-    <div class="container p-1" id="prizes">
+    <div class="container p-1" id="admin-prizes">
     </div>
   </div>
   <style>
@@ -69,7 +73,7 @@
       purchased: false
     }]
    
-    window.onload = function() {
+    /*window.onload = function() {
       var prizeContainer = document.getElementById("prizes");
       for (var i = 0; i < prizes.length; i++) {
         var row = document.createElement("div");
@@ -116,7 +120,7 @@
         prizeContainer.appendChild(row);
 
       }
-    }
+    }*/
   </script>
 </body>
 </html>
