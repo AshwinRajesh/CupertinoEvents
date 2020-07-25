@@ -35,7 +35,28 @@ $( document ).ready(function() {
         console.log()
         signupWithEmail($("#signup_username").val(),$("#signup_email").val(), $("#signup_pwd").val());
     });
+
+    $('input[name="datetimes"]').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(32, 'hour'),
+        locale: {
+            format: 'M/DD hh:mm A'
+        }
+    }, function(start, end, label) {
+        event_create_start = start.valueOf();
+        event_create_end = end.valueOf();
+        console.log(event_create_start);
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
+    $("#event_save_button").on("click", function() {
+        addEvent($("#event_name").val(), event_create_start, event_create_end, 0,0, $("#event_points_slide").val(), $("#event_description").val())
+    });
 });
+
+var event_create_start = 0;
+var event_create_end = 0;
 
 function loginWithEmail(email, passowrd){
     //generateAlert("#login_alerts", "success", "bruhh");
