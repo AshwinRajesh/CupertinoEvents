@@ -76,6 +76,41 @@ $( document ).ready(function() {
     $("#prize_save_button").on("click", function() {
         addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
     });
+    $("#event_filter_map").on('change', function() {
+        console.log($("#event_filter_map").val());
+        var filter = $("#event_filter_map").val();
+        return firebase.database().ref('/events').once('value').then(function (snapshot) {
+            var events = snapshot.val();
+            $("#eventList").children("li").each(function (){
+                console.log(this.id);
+                var event = events[this.id.split("_main")[0]];
+                //console.log(event);
+                const now = Date.now();
+                if(filter == "all") {
+                    $("#" + this.id).show();
+                }else if(filter == "upcoming"){
+                    if(event.start_time > now && event.end_time > now){
+                        $("#" + this.id).show();
+                    }else{
+                        $("#" + this.id).hide();
+                    }
+                }else if(filter == "past") {
+                    if (event.start_time < now && event.end_time < now) {
+                        $("#" + this.id).show();
+                    } else {
+                        $("#" + this.id).hide();
+                    }
+                }else{
+                    if (event.start_time < now && event.end_time > now) {
+                        $("#" + this.id).show();
+                    } else {
+                        $("#" + this.id).hide();
+                    }
+                }
+
+            });
+        });
+    });
 });
 
 var event_create_start = 0;
@@ -330,7 +365,7 @@ function loadPrize(snap) {
     row.appendChild(col1);
     row.appendChild(col2);
 
-    prizeContainer.appendChild(row);
+    if ($('#prizes').length > 0) prizeContainer.appendChild(row);
 
 }
 
