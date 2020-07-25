@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html"><strong>Cupertino Events</strong></a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html" style="font-size: 22px">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup.html" style="font-size: 22px">Signup</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="jumbotron text-center" style="margin-top:50px">
+    <h1>Manage Events</h1>
+    <p>Add, edit, or delete published events.</p> 
+  </div>
+    
+  <div class="container bg">
+    <form>
+      <div class="form-group">
+        <label for="name" style = "font-size: 20px; color: #4e89ed">Name of Event</label>
+        <input type="name" class="form-control" placeholder="ex. johndoe123@email.com" id="name">
+      </div>
+      <div class="form-group">
+        <label for="Description" style = "font-size: 20px; color: #4e89ed;"">Description</label>
+        <textarea type="Description" class="form-control" placeholder="ex. John Doe" id="Description" style="height: 100px"></textarea>
+      </div>
+      <label for="Start" style = "font-size: 20px; color: #4e89ed">Start</label>
+      <div class="row">
+        <div class="col form-group">
+          <select name="smonth" class="custom-select" id="smonth">
+            <option selected>Select Month</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <select name="sdate" class="custom-select" id="sdate">
+            <option selected>Select Date</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <select name="syear" class="custom-select" id="syear">
+            <option selected>Select Year</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <select name="stime" class="custom-select" id="stime">
+            <option selected>Select Time</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="End" style = "font-size: 20px; color: #4e89ed">End</label>
+      <div class="row">
+        <div class="col form-group">
+          <select name="emonth" class="custom-select" id="emonth">
+            <option selected>Select Month</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <select name="edate" class="custom-select" id="edate">
+            <option selected>Select Date</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <select name="eyear" class="custom-select" id="eyear">
+            <option selected>Select Year</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <select name="etime" class="custom-select" id="etime">
+            <option selected>Select Time</option>
+          </select>
+        </div>
+      </div>
+      <label for="points" style = "font-size: 20px; color: #4e89ed; display:block">Points</label>
+      <input type="range" class="custom-range" id="points" name="points" style="width: 200px; display: inline" onchange="updateLabel()">
+      <p style="display: inline; font-size: 20px; color: #4e89ed; margin-left: 15px" id="points-label"></p>
+      <div class="form-group form-check" style="margin-top: 20px">
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox"> Remember me
+        </label>
+      </div>
+      
+    </form>
+
+    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Save</button>
+    <a type="submit" class="btn btn-primary" style="margin-bottom: 20px" href="admin-events.html">Close</a>
+    <button type="submit" class="btn btn-danger" style="margin-bottom: 20px">Delete Event</button>
+
+  </div>
+  <script>
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    function decodeTime(num) {
+      var hour = Math.floor(num / 60);
+      var minute = num % 60;
+      minute = (minute < 9) ? ("0" + minute) : minute + "";
+      var ampm = (hour > 11) ? "pm" : "am";
+      hour = (hour % 12 == 0) ? 12 : hour % 12;
+      return (hour + ":" + minute + ampm);
+    }
+
+    var smonthSelect = document.getElementById("smonth");
+    var emonthSelect = document.getElementById("emonth");
+    for (var i = 0; i < monthNames.length; i++) {
+        var soption = document.createElement("option");
+        soption.value = monthNames[i];
+        soption.innerHTML = monthNames[i];
+        var eoption = document.createElement("option");
+        eoption.value = monthNames[i];
+        eoption.innerHTML = monthNames[i];
+        smonthSelect.appendChild(soption);
+        emonthSelect.appendChild(eoption);
+    }
+
+    var syearSelect = document.getElementById("syear");
+    var eyearSelect = document.getElementById("eyear");
+    for (var i = 2020; i < 2041; i++) {
+        var soption = document.createElement("option");
+        soption.value = i + "";
+        soption.innerHTML = i + "";
+        var eoption = document.createElement("option");
+        eoption.value = i + "";
+        eoption.innerHTML = i + "";
+        syearSelect.appendChild(soption);
+        eyearSelect.appendChild(eoption);
+    }
+
+
+    var sdateSelect = document.getElementById("sdate");
+    var edateSelect = document.getElementById("edate");
+    for (var i = 1; i < 32; i++) {
+        var soption = document.createElement("option");
+        soption.value = i + "";
+        soption.innerHTML = i + "";
+        var eoption = document.createElement("option");
+        eoption.value = i + "";
+        eoption.innerHTML = i + "";
+        sdateSelect.appendChild(soption);
+        edateSelect.appendChild(eoption);
+    }
+
+    var stimeSelect = document.getElementById("stime");
+    var etimeSelect = document.getElementById("etime");
+    for (var i = 0; i < 96; i++) {
+        var soption = document.createElement("option");
+        var timeStr = decodeTime(i * 15);
+        soption.value = timeStr;
+        soption.innerHTML = timeStr;
+        var eoption = document.createElement("option");
+        eoption.value = timeStr;
+        eoption.innerHTML = timeStr;
+        stimeSelect.appendChild(soption);
+        etimeSelect.appendChild(eoption);
+    }
+
+    function updateLabel() {
+        var slider = document.getElementById("points");
+        var label = document.getElementById("points-label");
+
+        label.innerHTML = slider.value;
+    }
+
+
+    /*function numDays(Time, year) {
+      switch(Time) {
+        case "February":
+          return (year % 4 == 0 && year % 100 != 0 && year % 400 == 0) ? 29 : 28;
+        case "January", "March", "May", "July", "August", "October", "December":
+          return 31;
+        default:
+          return 30;
+      }
+    }*/
+
+
+
+  </script>
+</body>
+</html>

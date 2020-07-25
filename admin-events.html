@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="map.js"></script>
+  <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAQdwnCzYyrcMnPhYaIEToVEYUfio6GcEk&callback=initMap" defer></script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html"><strong>Cupertino Events</strong></a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="admin-events.html" style="font-size: 22px">Manage Events</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="map.html" style="font-size: 22px">View Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html" style="font-size: 22px">Sign Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="jumbotron text-center" style="margin-top:50px">
+    <h1>Manage Events</h1>
+    <p>Add, edit, or delete published events.</p> 
+  </div>
+    
+  <div class="container bg">
+    <div class="container p-5">
+      <div class="row">
+        <div id = "map" style="height:400px; width: 600px; float: left; margin-right: 30px; margin-bottom: 30px"></div>
+        <div class='col-sm-4'>
+          <h3 style="margin-bottom: 20px">Events</h3>
+          <ul class="list-group" style="overflow: scroll; max-height: 280px" id="recent-events">
+            <a class="list-group-item list-group-item-action">First item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">Second item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">Third item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">First item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">Second item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">Third item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">First item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">Second item</a>
+            <a href="event.html" class="list-group-item list-group-item-action">Third item</a>
+          </ul>
+          <a type="button" class="btn btn-primary" style="margin-top: 20px" href="event.html">Create Event</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
