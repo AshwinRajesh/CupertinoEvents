@@ -169,6 +169,7 @@ function checkInToEvent(eventKey){
                     console.log("Data saved successfully!");
                 }
             });
+            localStorage.setItem("points", localStorage.getItem("points") + pointValue);
             generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
         }
     });
