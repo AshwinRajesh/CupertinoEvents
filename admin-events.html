@@ -53,10 +53,101 @@
             <a href="event.html" class="list-group-item list-group-item-action">Second item</a>
             <a href="event.html" class="list-group-item list-group-item-action">Third item</a>
           </ul>
-          <a type="button" class="btn btn-primary" style="margin-top: 20px" href="event.html">Create Event</a>
+          <button type="button" class="btn btn-primary" style="margin-top: 20px" id = "create">Create Event</button>
+          <button type="button" class="btn btn-danger" style="margin-top: 20px" id = "cancel">Cancel</button>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    var map;
+    var newMarker;
+    var infoWindow;
+    var canContinue = false;
+    var eventCanBeAdded = false;
+    var create;
+    var cancel;
+    window.onload = function() {
+      cancel = document.getElementById("cancel");
+      cancel.style.display = "none";
+      create = document.getElementById("create");
+      create.addEventListener("click",
+        function() {
+          if (!eventCanBeAdded) {
+            create.innerHTML = "Click on map to place marker";
+            create.className = "btn btn-secondary";
+            eventCanBeAdded = true;
+            cancel.style.display = "inline";
+          }
+          if (canContinue) {
+
+            //cancel.style.display = "none";
+            window.location.href = "event.html";
+          }
+        })
+      cancel.addEventListener("click",
+        function() {
+          if (newMarker != null) {
+            newMarker.setMap(null);
+          }
+          create.innerHTML = "Create Event";
+          create.className = "btn btn-primary";
+          eventCanBeAdded = false;
+          canContinue = false;
+          cancel.style.display = "none";
+
+        })
+    }
+
+    function initMap() {
+      map = new google.maps.Map(
+        document.getElementById('map'), {
+          center: {
+                lat: 37.3230,
+                lng: -122.0322
+            },
+            zoom: 14
+        }
+      );
+      addMarker({lat: 37.3230, lng: -122.0322}, "Sample Event", "Come join us at this sample event!", new Date("July 24 2020 12:00:00"), new Date("July 24 2020 15:00:00"));
+      map.addListener('click', function(mapsMouseEvent) {
+          // Close the current InfoWindow.
+          //infoWindow.close();
+
+          // Create a new InfoWindow.
+          if (eventCanBeAdded) {
+            addBlankMarker(mapsMouseEvent.latLng);
+            canContinue = true;
+            create.innerHTML = "Continue";
+            create.className = "btn btn-primary";
+            localStorage.setItem("newEventLatLng", mapsMouseEvent.latLng);
+          }
+      });
+    }
+
+
+    function addBlankMarker(position) {
+      canContinue = true;
+      if (newMarker == null) {
+        newMarker = new google.maps.Marker({
+            position: position, 
+            map: map
+        });
+        infoWindow = new google.maps.InfoWindow({
+          content: "<h5>New Event</h5>"
+        });
+        newMarker.addListener('click', function() {
+          infoWindow.open(map, newMarker);
+        });
+      } else {
+        newMarker.setMap(map);
+        newMarker.setPosition(position);
+      }
+
+      infoWindow.open(map, newMarker);
+
+        
+    }
+  </script>
 </body>
 </html>

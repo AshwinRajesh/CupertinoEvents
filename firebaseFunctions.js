@@ -1,4 +1,7 @@
+var ready = false;
+
 $( document ).ready(function() {
+    
     var firebaseConfig = {
         apiKey: "AIzaSyDEaV7YhmgWMbWoW1G2JQpbqr-fO8380og",
         authDomain: "hackcupertinodb.firebaseapp.com",
@@ -19,7 +22,6 @@ $( document ).ready(function() {
         if(firebaseUser){
             console.log("Logged in!");
             console.log(firebaseUser.displayName);
-            loadUser();
             //$("#logoutButton").show();
         }else{
             console.log("Logged out!");
@@ -28,15 +30,19 @@ $( document ).ready(function() {
     });
 
     //Login
-    $("#login_button").on("click", function() {
+    /*$("#login_button").on("click", function() {
         loginWithEmail($("#login_email").val(), $("#login_email").val());
-    });
+    });*/
     $("#signup_button").on("click", function() {
         
         signupWithEmail($("#signup_username").val(),$("#signup_email").val(), $("#signup_pwd").val());
     });
     $("#sign_out").on("click", function() {
         logOut();
+    });
+    $("#login_button").on("click", function() {
+        loginWithEmail($("#login_email").val(), $("#login_pwd").val());
+
     });
 });
 
@@ -46,7 +52,10 @@ function loginWithEmail(email, password){
     //generateAlert("#login_alerts", "success", "bruhh");
     const auth = firebase.auth();
     const promise = auth.signInWithEmailAndPassword(email, password);
-    promise.catch(e => console.log(e.message));
+    promise.catch(e => console.log(e.message)).then(() => {
+        loadUser();
+    });
+
     
 }
 
@@ -70,7 +79,7 @@ function signupWithEmail(username, email, password){
                 console.log(error.message);
             } else {
                 console.log("Data saved successfully!");
-                window.location.href = "welcome.html";
+                loadUser();
             }
         });
     });
@@ -78,7 +87,6 @@ function signupWithEmail(username, email, password){
 
 function logOut(){
     firebase.auth().signOut();
-    alert("h");
     window.location.replace("./index.html");
 }
 
@@ -185,12 +193,13 @@ function loadUser() {
       username = snapshot.val().name;
       points = snapshot.val().points;
       events = snapshot.val().user_events;
-      console.log(events);
+      
 
       // ...
       localStorage.setItem("username", username);
       localStorage.setItem("points", points + "");
-      localStorage.setItem("events-attended", events.length + "");
+      //localStorage.setItem("events-attended", events.length + "");
+      window.location.href = "welcome.html";
     });
     
 }

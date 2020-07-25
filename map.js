@@ -3,6 +3,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 ];
 
 var map;
+var newMarker;
 
 function initMap() {
 	map = new google.maps.Map(
@@ -15,7 +16,16 @@ function initMap() {
 	  }
 	);
 	addMarker({lat: 37.3230, lng: -122.0322}, "Sample Event", "Come join us at this sample event!", new Date("July 24 2020 12:00:00"), new Date("July 24 2020 15:00:00"));
+	map.addListener('click', function(mapsMouseEvent) {
+      // Close the current InfoWindow.
+      //infoWindow.close();
+
+      // Create a new InfoWindow.
+
+      addBlankMarker(mapsMouseEvent.latLng);
+    });
 }
+
 
 function formatDate(date) {
 	var hour = (date.getHours() % 12 == 0) ? 12 : date.getHours() % 12;
@@ -25,12 +35,14 @@ function formatDate(date) {
 	return full;
 }
 
+
+
+
 function addMarker(position, title, description, start, end, id) {
 	var marker = new google.maps.Marker({
 	  	position: position, 
 	  	map: map
   	});
-
   	/*var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+
