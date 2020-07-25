@@ -137,7 +137,8 @@ function loginWithEmail(email, password){
     //generateAlert("#login_alerts", "success", "bruhh");
     const auth = firebase.auth();
     const promise = auth.signInWithEmailAndPassword(email, password);
-    promise.catch(e => console.log(e.message)).then(() => {
+    promise.catch(e => {console.log(e.message); console.log("ISSUE"); generateAlert("#login_alerts", "danger", "There was an issue trying to log in.");})
+        .then(() => {
         loadUser();
     });
 
