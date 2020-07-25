@@ -10,9 +10,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="map.js"></script>
   <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAQdwnCzYyrcMnPhYaIEToVEYUfio6GcEk&callback=initMap" defer></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-database.js"></script>
+  <script type="text/javascript" src="firebaseFunctions.js"></script>
 </head>
 <body>
-  <nav class="navbar navbar-inverse navbar-expand-sm bg-light fixed-top">
+  <nav class="navbar navbar-inverse navbar-expand-sm bg-light sticky-top">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="index.html"><strong>Cupertino Events</strong></a>
@@ -31,6 +36,8 @@
     </div>
   </nav>
 
+  <div id="map_alerts"></div>
+
   <div class="jumbotron text-center" style="margin-top:50px">
     <h1>Find Events</h1>
     <p>Map map map map</p> 
@@ -39,6 +46,22 @@
   <div class="container bg">
     <div class="container p-1">
       <div id = "map" style="height:400px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" style="text-align: center;">Events</div>
+    <div class="card-body">
+      <div class="accordion" id="accordionMyItems" style="height: 30vh;overflow:scroll;-webkit-overflow-scrolling: touch;">
+        <ul class="list-group list-group-flush" id="eventList">
+          <li class="list-group-item">
+            <h1>Name (200pts)</h1>
+            <h6>10 to 2</h6>
+            <h5>Notes a;lskdjfaksjfas a;lsj fl;kakj aslkj lkkjdflk</h5>
+            <button id="reeebutton">Check In</button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
