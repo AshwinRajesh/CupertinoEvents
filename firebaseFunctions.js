@@ -58,11 +58,10 @@ $( document ).ready(function() {
     });
 
     $('input[name="prizedatetimes"]').daterangepicker({
-        timePicker: true,
         startDate: moment().startOf('hour'),
         endDate: moment().startOf('hour').add(32, 'hour'),
         locale: {
-            format: 'M/DD/YYYY hh:mm A'
+            format: 'M/DD/YYYY'
         }
     }, function(start, end, label) {
         prize_create_start = start.valueOf();
@@ -71,10 +70,12 @@ $( document ).ready(function() {
     });
 
     $("#event_save_button").on("click", function() {
-        addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val())
+        addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
+        window.location.href = "admin-events.html";
     });
     $("#prize_save_button").on("click", function() {
         addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
+        window.location.href = "admin-prizes.html";
     });
 });
 
@@ -289,6 +290,7 @@ function loadPrize(snap) {
     var key = obj.key;
 
     var prizeContainer = document.getElementById("prizes");
+    var adminPrizeContainer = document.getElementById("admin-prizes");
 
     var row = document.createElement("div");
     row.className = "row p-5 my-4";
@@ -303,7 +305,7 @@ function loadPrize(snap) {
     
     var date = document.createElement("p");
     date.className = "date";
-    date.innerHTML = "Until " + (end.getMonth() + 1) + "/" + end.getDate() + "/" + end.getFullYear() + ".";
+    date.innerHTML = (start.getMonth() + 1) + "/" + start.getDate() + "/" + start.getFullYear() + " to " + (end.getMonth() + 1) + "/" + end.getDate() + "/" + end.getFullYear() + ".";
     
     var col2 = document.createElement("div");
     col2.className = "col-sm-4";
@@ -330,7 +332,9 @@ function loadPrize(snap) {
     row.appendChild(col1);
     row.appendChild(col2);
 
-    prizeContainer.appendChild(row);
+
+    $("#prizes").append(row);
+    $("#admin-prizes").append(row);
 
 }
 
