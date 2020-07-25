@@ -43,16 +43,12 @@
   <div class="container bg">
     <form>
       <div class="form-group">
-        <label for="event_name" style = "font-size: 20px; color: #4e89ed">Name of Event</label>
-        <input type="name" class="form-control" placeholder="ex. johndoe123@email.com" id="event_name">
+        <label for="event_name" style = "font-size: 20px; color: #4e89ed">Prize</label>
+        <input type="name" class="form-control" placeholder="ex. Gift Card" id="prize_name">
       </div>
       <div class="form-group">
-        <label for="event_description" style = "font-size: 20px; color: #4e89ed;"">Description</label>
-        <textarea type="Description" class="form-control" placeholder="ex. John Doe" id="event_description" style="height: 100px"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="datetime" style = "font-size: 20px; color: #4e89ed">Dates and Times</label>
-        <input type="text" class="form-control" name="eventdatetimes" id="datetime"/>
+        <label for="datetime" style = "font-size: 20px; color: #4e89ed">Expire Date</label>
+        <input type="text" class="form-control" name="prizedatetimes" id="prizedatetime"/>
       </div>
       <label for="event_points_slide" style = "font-size: 20px; color: #4e89ed; display:block">Points</label>
       <input type="range" class="custom-range" id="event_points_slide" name="points" style="width: 200px; display: inline" onchange="updateLabel()">
@@ -60,9 +56,9 @@
       
     </form>
 
-    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" id="event_save_button">Save</button>
+    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" id="prize_save_button">Save</button>
     <a type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" href="admin-events.html">Close</a>
-    <button type="submit" class="btn btn-danger" style="margin-bottom: 20px; margin-top: 20px">Delete Event</button>
+    <button type="submit" class="btn btn-danger" style="margin-bottom: 20px; margin-top: 20px">Delete</button>
 
   </div>
   <script>

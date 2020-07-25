@@ -18,6 +18,9 @@ $( document ).ready(function() {
     dbRefObject.on("child_removed", snap => {console.log("Removed!"); console.log(snap.val())});
     dbRefObject.on("child_changed", snap => {console.log("Changed!"); console.log(snap.val())});
 
+    const prizeRef = firebase.database().ref().child("prizes");
+    prizeRef.on("child_added", snap => {console.log("Added!"); loadPrize(snap); console.log(snap.val())});
+
     firebase.auth().onAuthStateChanged(firebaseUser => {
         if(firebaseUser){
             console.log("Logged in!");
@@ -42,7 +45,7 @@ $( document ).ready(function() {
         logOut();
     });
 
-    $('input[name="datetimes"]').daterangepicker({
+    $('input[name="eventdatetimes"]').daterangepicker({
         timePicker: true,
         startDate: moment().startOf('hour'),
         endDate: moment().startOf('hour').add(32, 'hour'),
@@ -56,13 +59,31 @@ $( document ).ready(function() {
         console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
     });
 
+    $('input[name="prizedatetimes"]').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(32, 'hour'),
+        locale: {
+            format: 'M/DD/YYYY hh:mm A'
+        }
+    }, function(start, end, label) {
+        prize_create_start = start.valueOf();
+        prize_create_end = end.valueOf();
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
     $("#event_save_button").on("click", function() {
         addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val())
+    });
+    $("#prize_save_button").on("click", function() {
+        addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
     });
 });
 
 var event_create_start = 0;
 var event_create_end = 0;
+var prize_create_start = 0;
+var prize_create_end = 0;
 
 /*
 function loginWithEmail(email, passowrd){
@@ -103,7 +124,8 @@ function signupWithEmail(username, email, password){
             name: username,
             uid: user.uid,
             points: 0,
-            user_events: {placeholder: 0}
+            user_events: {placeholder: 0},
+            prizes: {placeholder: 0}
         }, function(error) {
             if (error) {
                 console.log(error.message);
@@ -141,6 +163,23 @@ function addEvent(name, start, end, lat, lon, value, notes){
     });
 }
 
+function addPrize(title, start, end, points) {
+    var newPostKey = firebase.database().ref().child('posts').push().key;
+    firebase.database().ref("prizes/" + newPostKey).set({
+        key: newPostKey,
+        name: title,
+        start_time: start,
+        end_time: end,
+        point_value: points
+    }, function(error) {
+        if (error) {
+            console.log(error.message);
+        } else {
+            console.log("Data saved successfully!");
+        }
+    });
+}
+
 function checkInToEvent(eventKey){
     var user = firebase.auth().currentUser;
     return firebase.database().ref('/').once('value').then(function (snapshot) {
@@ -169,7 +208,7 @@ function checkInToEvent(eventKey){
                     console.log("Data saved successfully!");
                 }
             });
-            localStorage.setItem("points", localStorage.getItem("points") + pointValue);
+            localStorage.setItem("points", parseInt(localStorage.getItem("points")) + pointValue);
             generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
         }
     });
@@ -202,8 +241,6 @@ function addEventElement(snap){
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
     });
-    console.log(obj.latitude);
-    console.log(obj.longitude);
     addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
 }
 
@@ -224,15 +261,109 @@ function loadUser() {
 
     db.ref('/users/' + uid).once('value').then(function(snapshot) {
       username = snapshot.val().name;
-      points = snapshot.val().points;
+      points = parseInt(snapshot.val().points);
       events = snapshot.val().user_events;
       
 
       // ...
       localStorage.setItem("username", username);
-      localStorage.setItem("points", points + "");
+      localStorage.setItem("points", points);
       //localStorage.setItem("events-attended", events.length + "");
       window.location.href = "welcome.html";
     });
     
+}
+
+function loadPrize(snap) {
+    obj = snap.val();
+    var start = new Date(obj.start_time);
+    var end = new Date(obj.end_time);
+    var prize_name = obj.name;
+    var points = obj.point_value;
+    var key = obj.key;
+
+    var prizeContainer = document.getElementById("prizes");
+
+    var row = document.createElement("div");
+    row.className = "row p-5 my-4";
+    row.style = "background-color: #4e89ed";
+    
+    var col1 = document.createElement("div");
+    col1.className = "col-sm-8";
+    
+    var title = document.createElement("h2");
+    title.className = "title";
+    title.innerHTML = prize_name;
+    
+    var date = document.createElement("p");
+    date.className = "date";
+    date.innerHTML = "Until " + (end.getMonth() + 1) + "/" + end.getDate() + "/" + end.getFullYear() + ".";
+    
+    var col2 = document.createElement("div");
+    col2.className = "col-sm-4";
+
+    var pts = document.createElement("h1");
+    pts.innerHTML = points + " pts";
+    pts.className = "points";
+
+    col2.appendChild(pts);
+
+    var button = document.createElement("button");
+    button.innerHTML = "Purchase";
+    button.className = "btn btn-light";
+    button.type = "button";
+    button.id = key;
+    button.addEventListener("click", function() {
+      purchase(this.id);
+    });
+
+    col1.appendChild(title);
+    col1.appendChild(date);
+    col1.appendChild(button);
+
+    row.appendChild(col1);
+    row.appendChild(col2);
+
+    prizeContainer.appendChild(row);
+
+}
+
+
+function purchase(prizeKey) {
+
+    var user = firebase.auth().currentUser;
+    return firebase.database().ref('/').once('value').then(function (snapshot) {
+        var users = snapshot.val().users;
+        var user_points = parseInt(users[user.uid].points);
+        var pointValue = parseInt(snapshot.val().prizes[prizeKey].point_value);
+        console.log(users[user.uid]);
+        if (user_points < pointValue) {
+            console.log("Not enough points to purchase this prize!");
+        }
+        else if(prizeKey in users[user.uid].prizes){
+            console.log("Already purchased this prize!");
+            //generateAlert("#map_alerts", "danger", "You have already checked in to this event!");
+            return false;
+        } else {
+            obj = users[user.uid].prizes;
+            obj[prizeKey] = 0;
+            firebase.database().ref("users/" + user.uid + "/prizes").set(obj, function(error) {
+                if (error) {
+                    console.log(error.message);
+                } else {
+                    console.log("Data saved successfully!");
+                }
+            });
+            firebase.database().ref("users/" + user.uid).update({points: user_points - pointValue}, function(error) {
+                if (error) {
+                    console.log(error.message);
+                } else {
+                    console.log("Data saved successfully!");
+                }
+            });
+            localStorage.setItem("points", parseInt(localStorage.getItem("points")) - pointValue);
+            generateAlert("#map_alerts", "success", "Success!\nYou purchased this prize for " + pointValue + "points!");
+            document.getElementById("points-label").innerHTML = "Points: " + localStorage.getItem("points");
+        }
+    });
 }

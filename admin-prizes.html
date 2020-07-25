@@ -8,10 +8,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-database.js"></script>
-  <script type="text/javascript" src="firebaseFunctions.js"></script>
 </head>
 <body>
 
@@ -43,7 +39,7 @@
   </div>
     
   <div class="container bg">
-    <h3 id = "points-label">Points: 1000</h3>
+    <a type="button" class="btn btn-primary" href="edit-prize.html">Add Prize</a>
     <div class="container p-1" id="prizes">
     </div>
   </div>
@@ -61,7 +57,7 @@
     }
   </style>
   <script>
-    /*const prizes = [{
+    const prizes = [{
       name: "Nintendo Switch", 
       date: new Date("July 31 2020 0:00:00"), 
       points: 3000,
@@ -71,10 +67,56 @@
       date: new Date("July 26 2020 0:00:00"), 
       points: 200,
       purchased: false
-    }]*/
-    document.getElementById("points-label").innerHTML = "Points: " + localStorage.getItem("points");
+    }]
    
+    window.onload = function() {
+      var prizeContainer = document.getElementById("prizes");
+      for (var i = 0; i < prizes.length; i++) {
+        var row = document.createElement("div");
+        row.className = "row p-5 my-4";
+        row.style = "background-color: #4e89ed";
+        
+        var col1 = document.createElement("div");
+        col1.className = "col-sm-8";
+        
+        var title = document.createElement("h2");
+        title.className = "title";
+        title.innerHTML = prizes[i].name;
+        
+        var date = document.createElement("p");
+        date.className = "date";
+        var d = prizes[i].date;
+        date.innerHTML = "Until " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + ".";
+        
+        var col2 = document.createElement("div");
+        col2.className = "col-sm-4";
 
+        var pts = document.createElement("h1");
+        pts.innerHTML = prizes[i].points + " pts";
+        pts.className = "points";
+
+        col2.appendChild(pts);
+
+        var button = document.createElement("button");
+        button.innerHTML = "Purchase";
+        button.className = "btn btn-light";
+        button.type = "button";
+        button.id = prizes[i].name;
+        button.addEventListener("click", function() {
+          purchase(this);
+        });
+
+        col1.appendChild(title);
+        col1.appendChild(date);
+        col1.appendChild(button);
+
+        row.appendChild(col1);
+        row.appendChild(col2);
+
+        prizeContainer.appendChild(row);
+
+      }
+    }
   </script>
 </body>
 </html>

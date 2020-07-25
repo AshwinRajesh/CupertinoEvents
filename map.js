@@ -16,14 +16,7 @@ function initMap() {
 	  }
 	);
 	addMarker(37.3230, -122.0322, "Sample Event", "Come join us at this sample event!", new Date("July 24 2020 12:00:00"), new Date("July 24 2020 15:00:00"));
-	map.addListener('click', function(mapsMouseEvent) {
-      // Close the current InfoWindow.
-      //infoWindow.close();
 
-      // Create a new InfoWindow.
-
-      addBlankMarker(mapsMouseEvent.latLng);
-    });
 }
 
 
