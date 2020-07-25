@@ -25,7 +25,7 @@ function formatDate(date) {
 	return full;
 }
 
-function addMarker(position, title, description, start, end) {
+function addMarker(position, title, description, start, end, id) {
 	var marker = new google.maps.Marker({
 	  	position: position, 
 	  	map: map
@@ -50,8 +50,9 @@ function addMarker(position, title, description, start, end) {
 		      '</div>'+
 		      '<h4 id="firstHeading" class="firstHeading" style="margin-bottom: 15px">' + title + '</h4>'+
 		      '<div id="bodyContent">'+
-		      '<p>' + description +
-		      '<p>' + 'Ongoing until ' + formatDate(end) + '</p>'+
+		      '<p style="font-size: 16px">' + description + '</p>'+ 
+		      '<p style="font-size: 16px">' + 'Ongoing until ' + formatDate(end) + '</p>'+
+		      '<button id=\"" + ' + id + ' + "_button\" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	} else {
@@ -60,8 +61,9 @@ function addMarker(position, title, description, start, end) {
 		      '</div>'+
 		      '<h4 id="firstHeading" class="firstHeading" style="margin-bottom: 15px">' + title + '</h4>'+
 		      '<div id="bodyContent">'+
-		      '<p>' + description +
-		      '<p>' + formatDate(start) + ' to ' + formatDate(end) + '</p>'+
+		      '<p style="font-size: 16px">' + description + '</p>' +
+		      '<p style="font-size: 16px">' + formatDate(start) + ' to ' + formatDate(end) + '</p>' +
+		      '<button id=\"" + ' + id + ' + "_button\" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	}

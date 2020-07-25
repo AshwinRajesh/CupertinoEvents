@@ -30,7 +30,10 @@
           <a class="nav-link" href="map.html" style="font-size: 22px">Map</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="signup.html" style="font-size: 22px">Sign Out</a>
+          <a class="nav-link" href="prizes.html" style="font-size: 22px">Rewards</a>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-link" style="font-size: 22px" id="signout">Sign Out</button>
         </li>
       </ul>
     </div>
@@ -38,32 +41,27 @@
 
   <div id="map_alerts"></div>
 
-  <div class="jumbotron text-center" style="margin-top:50px">
+  <div class="jumbotron text-center">
     <h1>Find Events</h1>
-    <p>Map map map map</p> 
+    <p>Search for and check in at events around Cupertino!</p> 
   </div>
     
   <div class="container bg">
     <div class="container p-1">
-      <div id = "map" style="height:400px"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header" style="text-align: center;">Events</div>
-    <div class="card-body">
-      <div class="accordion" id="accordionMyItems" style="height: 30vh;overflow:scroll;-webkit-overflow-scrolling: touch;">
-        <ul class="list-group list-group-flush" id="eventList">
-          <li class="list-group-item">
-            <h1>Name (200pts)</h1>
-            <h6>10 to 2</h6>
-            <h5>Notes a;lskdjfaksjfas a;lsj fl;kakj aslkj lkkjdflk</h5>
-            <button id="reeebutton">Check In</button>
-          </li>
-        </ul>
+      <div id = "map" style="height:400px; margin-bottom: 30px"></div>
+      <div class="card" style = "margin-bottom: 10px">
+        <div class="card-header" style="text-align: center;">Events</div>
+        <div class="card-body">
+          <div class="accordion" id="accordionMyItems" style="height: 30vh;overflow:scroll;-webkit-overflow-scrolling: touch">
+            <ul class="list-group list-group-flush" id="eventList">
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+
 
 </body>
 </html>

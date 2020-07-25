@@ -19,6 +19,7 @@ $( document ).ready(function() {
         if(firebaseUser){
             console.log("Logged in!");
             console.log(firebaseUser.displayName);
+            loadUser();
             //$("#logoutButton").show();
         }else{
             console.log("Logged out!");
@@ -26,22 +27,27 @@ $( document ).ready(function() {
         }
     });
 
-
     //Login
     $("#login_button").on("click", function() {
         loginWithEmail($("#login_email").val(), $("#login_email").val());
     });
     $("#signup_button").on("click", function() {
-        console.log()
+        
         signupWithEmail($("#signup_username").val(),$("#signup_email").val(), $("#signup_pwd").val());
+    });
+    $("#sign_out").on("click", function() {
+        logOut();
     });
 });
 
-function loginWithEmail(email, passowrd){
+
+
+function loginWithEmail(email, password){
     //generateAlert("#login_alerts", "success", "bruhh");
     const auth = firebase.auth();
-    const promise = auth.signInWithEmailAndPassword(email, passowrd);
+    const promise = auth.signInWithEmailAndPassword(email, password);
     promise.catch(e => console.log(e.message));
+    
 }
 
 function signupWithEmail(username, email, password){
@@ -51,19 +57,20 @@ function signupWithEmail(username, email, password){
     promise.catch(e => console.log(e.message)).then(() => {
         var user = firebase.auth().currentUser;
         user.updateProfile({
-            displayName: username,
+            displayName: username
         });
 
         firebase.database().ref("users/" + user.uid).set({
             name: username,
             uid: user.uid,
             points: 0,
-            user_events: {placeholder: 0}
+            user_events: []
         }, function(error) {
             if (error) {
                 console.log(error.message);
             } else {
                 console.log("Data saved successfully!");
+                window.location.href = "welcome.html";
             }
         });
     });
@@ -71,6 +78,8 @@ function signupWithEmail(username, email, password){
 
 function logOut(){
     firebase.auth().signOut();
+    alert("h");
+    window.location.replace("./index.html");
 }
 
 function addEvent(name, start, end, lat, lon, value, notes){
@@ -140,11 +149,13 @@ function generateAlert(id, color, message){
 function addEventElement(snap){
     obj = snap.val();
     console.log(obj);
+    var start = new Date(obj.start_time);
+    var end = new Date(obj.end_time);
     $("#eventList").append("<li class=\"list-group-item\">\n" +
-        "            <h1>" + obj.name + " (" + obj.point_value + "pts)</h1>\n" +
-        "            <h6>" + obj.start_time + " to " + obj.end_time+ "</h6>\n" +
+        "            <h3>" + obj.name + " <span style='color: #4e89ed'>" + obj.point_value + "pts</span></h3>\n" +
         "            <h5>" + obj.notes + "</h5>\n" +
-        "            <button id=\"" + obj.key + "_button\">Check In</button>" +
+        "            <h6>" + formatDate(start) + " to " + formatDate(end) + "</h6>\n" +    
+        "            <button id=\"" + obj.key + "_button\" class='btn btn-primary'>Check In</button>" +
         "          </li>");
 
     var key = obj.key;
@@ -152,6 +163,7 @@ function addEventElement(snap){
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
     });
+    addMarker({lat: obj.latitude, lng: obj.longitude}, obj.name, obj.notes, start, end, obj.key);
 }
 
 function buttonClick(){
@@ -160,4 +172,25 @@ function buttonClick(){
     //logOut();
     //signupWithEmail("joe", "joe9@gmail.com", "bruhaps123");
     //addEvent("meetup at jopes", 1595483789, 1595570225, 37.319309, -122.029259, 100, "IDEKsdfBRO");
+}
+
+function loadUser() {
+    var uid = firebase.auth().currentUser.uid;
+    var db = firebase.database();
+    var events;
+    var username;
+    var points;
+
+    db.ref('/users/' + uid).once('value').then(function(snapshot) {
+      username = snapshot.val().name;
+      points = snapshot.val().points;
+      events = snapshot.val().user_events;
+      console.log(events);
+
+      // ...
+      localStorage.setItem("username", username);
+      localStorage.setItem("points", points + "");
+      localStorage.setItem("events-attended", events.length + "");
+    });
+    
 }
