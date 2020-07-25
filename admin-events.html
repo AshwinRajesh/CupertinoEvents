@@ -120,7 +120,8 @@
             canContinue = true;
             create.innerHTML = "Continue";
             create.className = "btn btn-primary";
-            localStorage.setItem("newEventLatLng", mapsMouseEvent.latLng);
+            localStorage.setItem("newEventLat", mapsMouseEvent.latLng.lat());
+            localStorage.setItem("newEventLng", mapsMouseEvent.latLng.lng());
           }
       });
     }

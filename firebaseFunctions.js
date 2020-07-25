@@ -57,7 +57,7 @@ $( document ).ready(function() {
     });
 
     $("#event_save_button").on("click", function() {
-        addEvent($("#event_name").val(), event_create_start, event_create_end, 0,0, $("#event_points_slide").val(), $("#event_description").val())
+        addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val())
     });
 });
 
@@ -145,8 +145,8 @@ function checkInToEvent(eventKey){
     var user = firebase.auth().currentUser;
     return firebase.database().ref('/').once('value').then(function (snapshot) {
         var users = snapshot.val().users;
-        var user_points = users[user.uid].points;
-        var pointValue = snapshot.val().events[eventKey].point_value;
+        var user_points = parseInt(users[user.uid].points);
+        var pointValue = parseInt(snapshot.val().events[eventKey].point_value);
         console.log(users[user.uid]);
         if(eventKey in users[user.uid].user_events){
             console.log("Already checked in to this event");
@@ -169,7 +169,8 @@ function checkInToEvent(eventKey){
                     console.log("Data saved successfully!");
                 }
             });
-            generateAlert("#map_alerts", "success", "Success!\nYou gained " + points + "points!");
+            localStorage.setItem("points", localStorage.getItem("points") + pointValue);
+            generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
         }
     });
 }
@@ -201,7 +202,9 @@ function addEventElement(snap){
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
     });
-    addMarker({lat: obj.latitude, lng: obj.longitude}, obj.name, obj.notes, start, end, obj.key);
+    console.log(obj.latitude);
+    console.log(obj.longitude);
+    addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
 }
 
 function buttonClick(){
