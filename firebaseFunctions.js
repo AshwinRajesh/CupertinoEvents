@@ -1,5 +1,3 @@
-var ready = false;
-
 $( document ).ready(function() {
     
     var firebaseConfig = {

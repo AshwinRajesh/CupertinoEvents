@@ -57,7 +57,7 @@ function addMarker(lat, lng, title, description, start, end, id) {
 		      '<div id="bodyContent">'+
 		      '<p style="font-size: 16px">' + description + '</p>'+ 
 		      '<p style="font-size: 16px">' + 'Ongoing until ' + formatDate(end) + '</p>'+
-		      '<button id=\"" + ' + id + ' + "_button\" class="btn btn-primary">Check In</button>' +
+		      '<button id="' + id + '_button" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	} else {
@@ -68,7 +68,7 @@ function addMarker(lat, lng, title, description, start, end, id) {
 		      '<div id="bodyContent">'+
 		      '<p style="font-size: 16px">' + description + '</p>' +
 		      '<p style="font-size: 16px">' + formatDate(start) + ' to ' + formatDate(end) + '</p>' +
-		      '<button id=\"" + ' + id + ' + "_button\" class="btn btn-primary">Check In</button>' +
+		      '<button id="' + id + '_button" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	}
