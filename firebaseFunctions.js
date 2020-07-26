@@ -289,7 +289,7 @@ function findDistance(lat, lng, position2){
 }
 
 function generateAlert(id, color, message){
-    $(id).prepend("<div class=\"alert alert-" + color + " alert-dismissible fade show\" role=\"alert\">\n" +
+    $(id).prepend("<div class=\"alert alert-" + color + " alert-dismissible fade show fixed-bottom\" role=\"alert\">\n" +
         message + "\n" +
         "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
         "    <span aria-hidden=\"true\">&times;</span>\n" +
@@ -497,12 +497,11 @@ function purchase(prizeKey) {
         var user_points = parseInt(users[user.uid].points);
         var pointValue = parseInt(snapshot.val().prizes[prizeKey].point_value);
          var prizeName = parseInt(snapshot.val().prizes[prizeKey].name);
-        console.log(users[user.uid]);
         if (user_points < pointValue) {
-            console.log("Not enough points to purchase this prize!");
+            generateAlert("#prize_alerts", "danger", "Not enough points to purchase this prize!");
         }
         else if(prizeKey in users[user.uid].prizes){
-            console.log("Already purchased this prize!");
+            generateAlert("#prize_alerts", "danger", "Already purchased this prize!");
             //generateAlert("#map_alerts", "danger", "You have already checked in to this event!");
             return false;
         } else {
@@ -526,7 +525,7 @@ function purchase(prizeKey) {
             prize_list.push(name);
             localStorage.setItem("prize_list", JSON.stringify(prize_list));
             localStorage.setItem("points", parseInt(localStorage.getItem("points")) - pointValue);
-            generateAlert("#map_alerts", "success", "Success!\nYou purchased this prize for " + pointValue + "points!");
+            generateAlert("#prize_alerts", "success", "Success!\nYou purchased this prize for " + pointValue + " points!");
             document.getElementById("points-label").innerHTML = "Points: " + localStorage.getItem("points");
         }
     });
