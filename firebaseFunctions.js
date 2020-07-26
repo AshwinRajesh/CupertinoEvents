@@ -74,7 +74,7 @@ $( document ).ready(function() {
             addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
             window.location.href = "admin-events.html";
         } else {
-            saveEvent(localStorage.getItem("eventSelectedKey"), $("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
+            saveEvent(localStorage.getItem("eventSelectedKey"), $("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("eventSelectedLat"), localStorage.getItem("eventSelectedLng"), $("#event_points_slide").val(), $("#event_description").val());
             window.location.href = "admin-events.html";
         }
     });
@@ -364,6 +364,7 @@ function addEventElement(snap){
         } else {
             $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + name + "<button id=\"" + key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
         }
+
 
         $("#" + key + "_admin_button").on("click", function() {
             editEvent(key);
