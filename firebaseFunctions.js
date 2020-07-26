@@ -284,7 +284,7 @@ function addEventElement(snap){
     var key = obj.key;
     var points = obj.point_value;
     addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
-    addAdminMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
+    //addAdminMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
 
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
