@@ -313,8 +313,8 @@ function addEventElement(snap){
 
     var key = obj.key;
     var points = obj.point_value;
-    addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
-    //addAdminMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
+    
+    addMarker(parseFloat(obj.latitude), parseFloat(obj.longitude), obj.name, obj.notes, start, end, obj.key);
 
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
@@ -350,6 +350,8 @@ function loadUser() {
     var events;
     var username;
     var points;
+    userEvents(uid);
+    userPrizes(uid);
 
     db.ref('/users/' + uid).once('value').then(function(snapshot) {
       username = snapshot.val().name;
@@ -470,6 +472,7 @@ function purchase(prizeKey) {
         var users = snapshot.val().users;
         var user_points = parseInt(users[user.uid].points);
         var pointValue = parseInt(snapshot.val().prizes[prizeKey].point_value);
+         var prizeName = parseInt(snapshot.val().prizes[prizeKey].name);
         console.log(users[user.uid]);
         if (user_points < pointValue) {
             console.log("Not enough points to purchase this prize!");
@@ -495,6 +498,9 @@ function purchase(prizeKey) {
                     console.log("Data saved successfully!");
                 }
             });
+            var prize_list = JSON.parse(localStorage.getItem("prize_list"));
+            prize_list.push(name);
+            localStorage.setItem("prize_list", JSON.stringify(prize_list));
             localStorage.setItem("points", parseInt(localStorage.getItem("points")) - pointValue);
             generateAlert("#map_alerts", "success", "Success!\nYou purchased this prize for " + pointValue + "points!");
             document.getElementById("points-label").innerHTML = "Points: " + localStorage.getItem("points");
@@ -536,7 +542,6 @@ function savePrize(prizeKey, name, start, end, points) {
 }
 
 function editEvent(eventKey) {
-    alert(eventKey);
     return firebase.database().ref('/events/' + eventKey).once('value').then(function (snapshot) {
         var name = snapshot.val().name;
         var points = parseInt(snapshot.val().point_value);
@@ -574,6 +579,36 @@ function saveEvent(eventKey, name, start, end, lat, lng, points, notes) {
             console.log(error.message);
         } else {
             console.log("Data saved successfully!");
+        }
+    });
+}
+
+function userEvents(uid) {
+    alert(uid);
+    return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
+        var events = snapshot.val().user_events;
+        var event_list = [];
+        for (var key in events) {
+            firebase.database().ref('/events/' + key).once('value').then(function (snapshot) {
+                var name = snapshot.val().name;
+                event_list.push(name);
+                localStorage.setItem("event_list", JSON.stringify(event_list));
+            });
+        }
+    });
+}
+
+function userPrizes(uid) {
+    alert(uid);
+    return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
+        var prizes = snapshot.val().prizes;
+        var prize_list = [];
+        for (var key in prizes) {
+            firebase.database().ref('/prizes/' + key).once('value').then(function (snapshot) {
+                var name = snapshot.val().name;
+                prize_list.push(name);
+                localStorage.setItem("prize_list", JSON.stringify(prize_list));
+            });
         }
     });
 }
