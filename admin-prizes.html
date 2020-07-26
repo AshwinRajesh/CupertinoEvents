@@ -43,7 +43,7 @@
   </div>
     
   <div class="container bg">
-    <a type="button" class="btn btn-primary" href="edit-prize.html">Add Prize</a>
+    <button type="button" class="btn btn-primary" id = "add-prize">Add Prize</button>
     <div class="container p-1" id="admin-prizes">
     </div>
   </div>
@@ -72,55 +72,14 @@
       points: 200,
       purchased: false
     }]
+
+    window.onload = function() {
+      document.getElementById("add-prize").addEventListener("click", function() {
+        localStorage.setItem("newPrize", true);
+        window.location.href = "edit-prize.html";
+      })
+    }
    
-    /*window.onload = function() {
-      var prizeContainer = document.getElementById("prizes");
-      for (var i = 0; i < prizes.length; i++) {
-        var row = document.createElement("div");
-        row.className = "row p-5 my-4";
-        row.style = "background-color: #4e89ed";
-        
-        var col1 = document.createElement("div");
-        col1.className = "col-sm-8";
-        
-        var title = document.createElement("h2");
-        title.className = "title";
-        title.innerHTML = prizes[i].name;
-        
-        var date = document.createElement("p");
-        date.className = "date";
-        var d = prizes[i].date;
-        date.innerHTML = "Until " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + ".";
-        
-        var col2 = document.createElement("div");
-        col2.className = "col-sm-4";
-
-        var pts = document.createElement("h1");
-        pts.innerHTML = prizes[i].points + " pts";
-        pts.className = "points";
-
-        col2.appendChild(pts);
-
-        var button = document.createElement("button");
-        button.innerHTML = "Purchase";
-        button.className = "btn btn-light";
-        button.type = "button";
-        button.id = prizes[i].name;
-        button.addEventListener("click", function() {
-          purchase(this);
-        });
-
-        col1.appendChild(title);
-        col1.appendChild(date);
-        col1.appendChild(button);
-
-        row.appendChild(col1);
-        row.appendChild(col2);
-
-        prizeContainer.appendChild(row);
-
-      }
-    }*/
   </script>
 </body>
 </html>

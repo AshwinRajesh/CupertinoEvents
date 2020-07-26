@@ -70,12 +70,22 @@ $( document ).ready(function() {
     });
 
     $("#event_save_button").on("click", function() {
-        addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
-        window.location.href = "admin-events.html";
+        if (localStorage.getItem("newEvent") == "true") {
+            addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
+            window.location.href = "admin-events.html";
+        } else {
+            addEvent(localStorage.getItem("eventSelectedKey"), $("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
+            window.location.href = "admin-events.html";
+        }
     });
     $("#prize_save_button").on("click", function() {
-        addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
-        window.location.href = "admin-prizes.html";
+        if (localStorage.getItem("newPrize") == "true") {
+            addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
+            window.location.href = "admin-prizes.html";
+        } else {
+            savePrize(localStorage.getItem("prizeSelectedKey"), $("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
+            window.location.href = "admin-prizes.html";
+        }
     });
     $("#event_filter_map").on('change', function() {
         console.log($("#event_filter_map").val());
@@ -388,8 +398,9 @@ function loadPrize(snap) {
     edit.innerHTML = "Edit";
     edit.className = "btn btn-light";
     edit.type = "button";
-    button.addEventListener("click", function() {
-        localStorage.setItem()
+    edit.id = key;
+    edit.addEventListener("click", function() {
+        editPrize(this.id);
         window.location.href = "edit-prize.html";
     });
 
@@ -451,3 +462,78 @@ function purchase(prizeKey) {
         }
     });
 }
+
+function editPrize(prizeKey) {
+    return firebase.database().ref('/prizes/' + prizeKey).once('value').then(function (snapshot) {
+        var name = snapshot.val().name;
+        var points = parseInt(snapshot.val().point_value);
+        var start = parseInt(snapshot.val().start_time);
+        var end = parseInt(snapshot.val().end_time);
+
+        localStorage.setItem("prizeSelectedName", name);
+        localStorage.setItem("prizeSelectedPoints", points);
+        localStorage.setItem("prizeSelectedStart", start);
+        localStorage.setItem("prizeSelectedEnd", end);
+        localStorage.setItem("prizeSelectedKey", prizeKey);
+        localStorage.setItem("newPrize", false);
+    });
+}
+
+function savePrize(prizeKey, name, start, end, points) {
+    firebase.database().ref("prizes/" + prizeKey).set({
+        key: prizeKey,
+        name: name,
+        point_value: parseInt(points),
+        start_time: start,
+        end_time: end
+        
+    }, function(error) {
+        if (error) {
+            console.log(error.message);
+        } else {
+            console.log("Data saved successfully!");
+        }
+    });
+}
+
+function editEvent(eventKey) {
+    return firebase.database().ref('/events/' + eventKey).once('value').then(function (snapshot) {
+        var name = snapshot.val().name;
+        var points = parseInt(snapshot.val().point_value);
+        var start = parseInt(snapshot.val().start_time);
+        var end = parseInt(snapshot.val().end_time);
+        var notes = snapshot.val().notes;
+        var lng = parseFloat(snapshot.val().longitude);
+        var lat = parseFloat(snapshot.val().latitude);
+
+        localStorage.setItem("eventSelectedLat", lat);
+        localStorage.setItem("eventSelectedLng", lng);
+        localStorage.setItem("eventSelectedName", name);
+        localStorage.setItem("eventSelectedPoints", points);
+        localStorage.setItem("eventSelectedStart", start);
+        localStorage.setItem("eventSelectedEnd", end);
+        localStorage.setItem("eventSelectedKey", eventKey);
+        localStorage.setItem("newEvent", false);
+    });
+}
+
+function savePrize(eventKey, name, start, end, lat, lng, points, notes) {
+    firebase.database().ref("events/" + eventKey).set({
+        key: eventKey,
+        notes: notes,
+        name: name,
+        point_value: parseInt(points),
+        start_time: start,
+        end_time: end,
+        longitude: lng,
+        latitude: lat
+        
+    }, function(error) {
+        if (error) {
+            console.log(error.message);
+        } else {
+            console.log("Data saved successfully!");
+        }
+    });
+}
+

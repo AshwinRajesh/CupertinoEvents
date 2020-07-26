@@ -57,7 +57,7 @@
     </form>
 
     <button type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" id="prize_save_button">Save</button>
-    <a type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" href="admin-events.html">Close</a>
+    <a type="submit" class="btn btn-primary" style="margin-bottom: 20px; margin-top: 20px" href="admin-prizes.html">Close</a>
     <button type="submit" class="btn btn-danger" style="margin-bottom: 20px; margin-top: 20px">Delete</button>
 
   </div>
@@ -78,6 +78,17 @@
         var label = document.getElementById("points-label");
 
         label.innerHTML = slider.value;
+    }
+
+    window.onload = function() {
+      if (localStorage.getItem("newPrize") == "false") {
+        document.getElementById("prize_name").value = localStorage.getItem("prizeSelectedName");
+        document.getElementById("event_points_slide").value = localStorage.getItem("prizeSelectedPoints");
+        document.getElementById("points-label").innerHTML = localStorage.getItem("prizeSelectedPoints");
+        var start = new Date(localStorage.getItem("prizeSelectedStart"));
+        var end = new Date(localStorage.getItem("prizeSelectedEnd"));
+        //document.getElementById("prizedatetime").innerHTML = localStorage.getItem("prizeSelectedStart") + " - " + localStorage.getItem("prizeSelectedEnd");
+      }
     }
 
 
