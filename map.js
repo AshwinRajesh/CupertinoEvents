@@ -15,7 +15,7 @@ function initMap() {
         zoom: 14
 	  }
 	);
-	addMarker(37.3230, -122.0322, "Sample Event", "Come join us at this sample event!", new Date("July 24 2020 12:00:00"), new Date("July 24 2020 15:00:00"));
+	//addMarker(37.3230, -122.0322, "Sample Event", "Come join us at this sample event!", new Date("July 24 2020 12:00:00"), new Date("July 24 2020 15:00:00"));
 
 }
 
@@ -71,7 +71,7 @@ function addMarker(lat, lng, title, description, start, end, id) {
 		      '<div id="bodyContent">'+
 		      '<p style="font-size: 16px">' + description + '</p>' +
 		      '<p style="font-size: 16px">' + formatDate(start) + ' to ' + formatDate(end) + '</p>' +
-		      '<button onclick = "checkin(id)" id="' + id + 'h" class="btn btn-primary">Check In</button>' +
+		      '<button onclick = "checkin(id)" id="' + id + '" class="btn btn-primary">Check In</button>' +
 		      '</div>'+
 		      '</div>';
     	}

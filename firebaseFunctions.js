@@ -80,10 +80,10 @@ $( document ).ready(function() {
     });
     $("#prize_save_button").on("click", function() {
         if (localStorage.getItem("newPrize") == "true") {
-            addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
+            addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#prize_points_slide").val());
             window.location.href = "admin-prizes.html";
         } else {
-            savePrize(localStorage.getItem("prizeSelectedKey"), $("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
+            savePrize(localStorage.getItem("prizeSelectedKey"), $("#prize_name").val(), prize_create_start, prize_create_end, $("#prize_points_slide").val());
             window.location.href = "admin-prizes.html";
         }
     });
@@ -231,12 +231,16 @@ var userLat = 0;
 
 function checkInToEvent(eventKey){
     var user = firebase.auth().currentUser;
+    var current = new Date();
     return firebase.database().ref('/').once('value').then(function (snapshot) {
         var users = snapshot.val().users;
         var user_points = parseInt(users[user.uid].points);
         var pointValue = parseInt(snapshot.val().events[eventKey].point_value);
         userLat = parseFloat(snapshot.val().events[eventKey].lat);
         userLon = parseFloat(snapshot.val().events[eventKey].lng);
+        var eventName = snapshot.val().events[eventKey].name;
+        var start = new Date(parseInt(snapshot.val().events[eventKey].start_time));
+        var end = new Date(parseInt(snapshot.val().events[eventKey].end_time));
         console.log(users[user.uid]);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(savePosition);
@@ -247,7 +251,15 @@ function checkInToEvent(eventKey){
             console.log("Already checked in to this event");
             generateAlert("#map_alerts", "danger", "You have already checked in to this event!");
             return false;
-        }else{
+        } else if (current < start) { 
+            console.log("This event has not happened yet!");
+            generateAlert("#map_alerts", "danger", "This event has not happened yet!");
+            return false;
+        } else if (current > end) {
+            console.log("This event has finished already!");
+            generateAlert("#map_alerts", "danger", "This event has finished already!");
+            return false;
+        } else {
             if(distanceFromEvent < 5) {
                 obj = users[user.uid].user_events;
                 obj[eventKey] = 0;
@@ -266,6 +278,14 @@ function checkInToEvent(eventKey){
                     }
                 });
                 localStorage.setItem("points", parseInt(localStorage.getItem("points")) + pointValue);
+                var event_list;
+                try {
+                    event_list = JSON.parse(localStorage.getItem("event_list"));
+                } catch(error) {
+                    event_list = [];
+                }
+                event_list.push(eventName);
+                localStorage.setItem("event_list", JSON.stringify(event_list));
                 generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + " points!");
             } else {
                 console.log("You are too far from the event to check in.");
@@ -309,8 +329,11 @@ function addEventElement(snap){
     var name = obj.name;
     var notes = obj.notes;
     var points = obj.point_value;
+    var current = new Date();
 
-    addMarker(parseFloat(obj.latitude), parseFloat(obj.longitude), obj.name, obj.notes, start, end, obj.key);
+    if (current < end) {
+        addMarker(parseFloat(obj.latitude), parseFloat(obj.longitude), obj.name, obj.notes, start, end, obj.key);
+    }
 
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         //var events = snapshot.val().user_events;
@@ -336,8 +359,11 @@ function addEventElement(snap){
 
         });
         
-
-        $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + obj.name + "<button id=\"" + obj.key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
+        if (end < current) {
+            $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + name + " (Complete)<button id=\"" + key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
+        } else {
+            $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + name + "<button id=\"" + key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
+        }
 
         $("#" + key + "_admin_button").on("click", function() {
             editEvent(key);
@@ -400,6 +426,8 @@ function loadPrize(snap) {
     var points = obj.point_value;
     var key = obj.key;
 
+    var current = new Date();
+
     var prizeContainer = document.getElementById("prizes");
     var adminPrizeContainer = document.getElementById("admin-prizes");
 
@@ -451,13 +479,26 @@ function loadPrize(snap) {
     editcol2.appendChild(editpts);
 
     var button = document.createElement("button");
-    button.innerHTML = "Purchase";
-    button.className = "btn btn-light";
-    button.type = "button";
-    button.id = key;
-    button.addEventListener("click", function() {
-      purchase(this.id);
-    });
+    var prize_list;
+    try {
+        prize_list = JSON.parse(localStorage.getItem("prize_list"));
+    } catch(error) {
+        prize_list = [];
+    }
+    if (prize_list.includes(prize_name)) {
+        button.innerHTML = "Purchased";
+        button.className = "btn btn-secondary";
+        button.disabled = true;
+    } else {
+        button.innerHTML = "Purchase";
+        button.className = "btn btn-light";
+        button.type = "button";
+        button.id = key;
+        button.disabled = false;
+        button.addEventListener("click", function() {
+          purchase(this.id);
+        });
+    }
 
     var edit = document.createElement("button");
     edit.innerHTML = "Edit";
@@ -482,10 +523,11 @@ function loadPrize(snap) {
 
     editrow.appendChild(editcol);
     editrow.appendChild(editcol2);
-
-    $("#prizes").append(row);
+    
+    if (start < current && current < end) {
+        $("#prizes").append(row);
+    }
     $("#admin-prizes").append(editrow);
-
 }
 
 
@@ -496,14 +538,14 @@ function purchase(prizeKey) {
         var users = snapshot.val().users;
         var user_points = parseInt(users[user.uid].points);
         var pointValue = parseInt(snapshot.val().prizes[prizeKey].point_value);
-         var prizeName = parseInt(snapshot.val().prizes[prizeKey].name);
-        if (user_points < pointValue) {
-            generateAlert("#prize_alerts", "danger", "Not enough points to purchase this prize!");
-        }
-        else if(prizeKey in users[user.uid].prizes){
+        var prizeName = parseInt(snapshot.val().prizes[prizeKey].name);
+    
+        if(prizeKey in users[user.uid].prizes){
             generateAlert("#prize_alerts", "danger", "Already purchased this prize!");
             //generateAlert("#map_alerts", "danger", "You have already checked in to this event!");
             return false;
+        } else if (user_points < pointValue) {
+            generateAlert("#prize_alerts", "danger", "Not enough points to purchase this prize!");
         } else {
             obj = users[user.uid].prizes;
             obj[prizeKey] = 0;
@@ -521,8 +563,13 @@ function purchase(prizeKey) {
                     console.log("Data saved successfully!");
                 }
             });
-            var prize_list = JSON.parse(localStorage.getItem("prize_list"));
-            prize_list.push(name);
+            var prize_list;
+            try {
+                prize_list = JSON.parse(localStorage.getItem("prize_list"));
+            } catch(error) {
+                prize_list = [];
+            }
+            prize_list.push(prizeName);
             localStorage.setItem("prize_list", JSON.stringify(prize_list));
             localStorage.setItem("points", parseInt(localStorage.getItem("points")) - pointValue);
             generateAlert("#prize_alerts", "success", "Success!\nYou purchased this prize for " + pointValue + " points!");
@@ -607,6 +654,7 @@ function saveEvent(eventKey, name, start, end, lat, lng, points, notes) {
 }
 
 function userEvents(uid) {
+    localStorage.setItem("event_list", "");
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         var events = snapshot.val().user_events;
         var event_list = [];
@@ -621,6 +669,7 @@ function userEvents(uid) {
 }
 
 function userPrizes(uid) {
+    localStorage.setItem("prize_list", "");
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         var prizes = snapshot.val().prizes;
         var prize_list = [];
