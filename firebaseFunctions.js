@@ -77,6 +77,41 @@ $( document ).ready(function() {
         addPrize($("#prize_name").val(), prize_create_start, prize_create_end, $("#event_points_slide").val());
         window.location.href = "admin-prizes.html";
     });
+    $("#event_filter_map").on('change', function() {
+        console.log($("#event_filter_map").val());
+        var filter = $("#event_filter_map").val();
+        return firebase.database().ref('/events').once('value').then(function (snapshot) {
+            var events = snapshot.val();
+            $("#eventList").children("li").each(function (){
+                console.log(this.id);
+                var event = events[this.id.split("_main")[0]];
+                //console.log(event);
+                const now = Date.now();
+                if(filter == "all") {
+                    $("#" + this.id).show();
+                }else if(filter == "upcoming"){
+                    if(event.start_time > now && event.end_time > now){
+                        $("#" + this.id).show();
+                    }else{
+                        $("#" + this.id).hide();
+                    }
+                }else if(filter == "past") {
+                    if (event.start_time < now && event.end_time < now) {
+                        $("#" + this.id).show();
+                    } else {
+                        $("#" + this.id).hide();
+                    }
+                }else{
+                    if (event.start_time < now && event.end_time > now) {
+                        $("#" + this.id).show();
+                    } else {
+                        $("#" + this.id).hide();
+                    }
+                }
+
+            });
+        });
+    });
 });
 
 var event_create_start = 0;
@@ -102,7 +137,8 @@ function loginWithEmail(email, password){
     //generateAlert("#login_alerts", "success", "bruhh");
     const auth = firebase.auth();
     const promise = auth.signInWithEmailAndPassword(email, password);
-    promise.catch(e => console.log(e.message)).then(() => {
+    promise.catch(e => {console.log(e.message); console.log("ISSUE"); generateAlert("#login_alerts", "danger", "There was an issue trying to log in.");})
+        .then(() => {
         loadUser();
     });
 
@@ -370,7 +406,6 @@ function loadPrize(snap) {
 
     editrow.appendChild(editcol);
     editrow.appendChild(editcol2);
-
 
     $("#prizes").append(row);
     $("#admin-prizes").append(editrow);

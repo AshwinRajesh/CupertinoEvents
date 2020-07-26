@@ -53,7 +53,15 @@
     <div class="container p-1">
       <div id = "map" style="height:400px; margin-bottom: 30px"></div>
       <div class="card" style = "margin-bottom: 10px">
-        <div class="card-header" style="text-align: center;">Events</div>
+        <div class="card-header" style="text-align: center;">
+          <label for="event_filter_map">Events</label>
+          <select class="form-control" id="event_filter_map">
+            <option value="all">All</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="right now">Right Now</option>
+            <option value="past">Past</option>
+          </select>
+        </div>
         <div class="card-body">
           <div class="accordion" id="accordionMyItems" style="height: 30vh;overflow:scroll;-webkit-overflow-scrolling: touch">
             <ul class="list-group list-group-flush" id="eventList">
