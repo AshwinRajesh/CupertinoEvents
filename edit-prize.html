@@ -51,7 +51,7 @@
         <input type="text" class="form-control" name="prizedatetimes" id="prizedatetime"/>
       </div>
       <label for="event_points_slide" style = "font-size: 20px; color: #4e89ed; display:block">Points</label>
-      <input type="range" class="custom-range" id="event_points_slide" name="points" style="width: 200px; display: inline" onchange="updateLabel()">
+      <input type="range" class="custom-range" id="prize_points_slide" name="points" style="width: 200px; display: inline" onchange="updateLabel()">
       <p style="display: inline; font-size: 20px; color: #4e89ed; margin-left: 15px" id="points-label">50</p>
       
     </form>
@@ -74,7 +74,7 @@
     }
 
     function updateLabel() {
-        var slider = document.getElementById("event_points_slide");
+        var slider = document.getElementById("prize_points_slide");
         var label = document.getElementById("points-label");
 
         label.innerHTML = slider.value;
@@ -83,7 +83,7 @@
     window.onload = function() {
       if (localStorage.getItem("newPrize") == "false") {
         document.getElementById("prize_name").value = localStorage.getItem("prizeSelectedName");
-        document.getElementById("event_points_slide").value = localStorage.getItem("prizeSelectedPoints");
+        document.getElementById("prize_points_slide").value = localStorage.getItem("prizeSelectedPoints");
         document.getElementById("points-label").innerHTML = localStorage.getItem("prizeSelectedPoints");
         var start = new Date(localStorage.getItem("prizeSelectedStart"));
         var end = new Date(localStorage.getItem("prizeSelectedEnd"));

@@ -74,7 +74,7 @@ $( document ).ready(function() {
             addEvent($("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
             window.location.href = "admin-events.html";
         } else {
-            addEvent(localStorage.getItem("eventSelectedKey"), $("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
+            saveEvent(localStorage.getItem("eventSelectedKey"), $("#event_name").val(), event_create_start, event_create_end, localStorage.getItem("newEventLat"), localStorage.getItem("newEventLng"), $("#event_points_slide").val(), $("#event_description").val());
             window.location.href = "admin-events.html";
         }
     });
@@ -284,13 +284,20 @@ function addEventElement(snap){
     var key = obj.key;
     var points = obj.point_value;
     addMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
+    addAdminMarker(obj.latitude, obj.longitude, obj.name, obj.notes, start, end, obj.key);
 
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
     });
+    
 
     $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + obj.name + "<button id=\"" + obj.key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
-    
+
+    $("#" + key + "_admin_button").on("click", function() {
+        editEvent(key);
+        window.location.href = "event.html";
+    });
+
 }
 
 function removeEventElement(snap){
@@ -499,6 +506,7 @@ function savePrize(prizeKey, name, start, end, points) {
 }
 
 function editEvent(eventKey) {
+    alert(eventKey);
     return firebase.database().ref('/events/' + eventKey).once('value').then(function (snapshot) {
         var name = snapshot.val().name;
         var points = parseInt(snapshot.val().point_value);
@@ -515,11 +523,12 @@ function editEvent(eventKey) {
         localStorage.setItem("eventSelectedStart", start);
         localStorage.setItem("eventSelectedEnd", end);
         localStorage.setItem("eventSelectedKey", eventKey);
+        localStorage.setItem("eventSelectedNotes", notes);
         localStorage.setItem("newEvent", false);
     });
 }
 
-function savePrize(eventKey, name, start, end, lat, lng, points, notes) {
+function saveEvent(eventKey, name, start, end, lat, lng, points, notes) {
     firebase.database().ref("events/" + eventKey).set({
         key: eventKey,
         notes: notes,

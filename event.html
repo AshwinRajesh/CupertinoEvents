@@ -47,7 +47,7 @@
         <input type="name" class="form-control" placeholder="ex. johndoe123@email.com" id="event_name">
       </div>
       <div class="form-group">
-        <label for="event_description" style = "font-size: 20px; color: #4e89ed;"">Description</label>
+        <label for="event_description" style = "font-size: 20px; color: #4e89ed;">Description</label>
         <textarea type="Description" class="form-control" placeholder="ex. John Doe" id="event_description" style="height: 100px"></textarea>
       </div>
       <div class="form-group">
@@ -56,7 +56,7 @@
       </div>
       <label for="event_points_slide" style = "font-size: 20px; color: #4e89ed; display:block">Points</label>
       <input type="range" class="custom-range" id="event_points_slide" name="points" style="width: 200px; display: inline" onchange="updateLabel()">
-      <p style="display: inline; font-size: 20px; color: #4e89ed; margin-left: 15px" id="points-label">50</p>
+      <p style="display: inline; font-size: 20px; color: #4e89ed; margin-left: 15px" id="event-points-label">50</p>
       
     </form>
 
@@ -79,9 +79,22 @@
 
     function updateLabel() {
         var slider = document.getElementById("event_points_slide");
-        var label = document.getElementById("points-label");
+        var label = document.getElementById("event-points-label");
 
         label.innerHTML = slider.value;
+    }
+
+    window.onload = function() {
+      if (localStorage.getItem("newEvent") == "false") {
+        document.getElementById("event_name").value = localStorage.getItem("eventSelectedName");
+        document.getElementById("event_points_slide").value = localStorage.getItem("eventSelectedPoints");
+        document.getElementById("event-points-label").innerHTML = localStorage.getItem("eventSelectedPoints");
+        var start = new Date(localStorage.getItem("eventSelectedStart"));
+        var end = new Date(localStorage.getItem("eventSelectedEnd"));
+        alert(localStorage.getItem("eventSelectedNotes"));
+        document.getElementById("event_description").innerHTML = localStorage.getItem("eventSelectedNotes");
+        //document.getElementById("prizedatetime").innerHTML = localStorage.getItem("prizeSelectedStart") + " - " + localStorage.getItem("prizeSelectedEnd");
+      }
     }
 
 
