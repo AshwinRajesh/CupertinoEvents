@@ -333,26 +333,49 @@ function loadPrize(snap) {
     var row = document.createElement("div");
     row.className = "row p-5 my-4";
     row.style = "background-color: #4e89ed";
+
+    var editrow = document.createElement("div");
+    editrow.className = "row p-5 my-4";
+    editrow.style = "background-color: #4e89ed";
     
     var col1 = document.createElement("div");
     col1.className = "col-sm-8";
+
+    var editcol = document.createElement("div");
+    editcol.className = "col-sm-8";
     
     var title = document.createElement("h2");
     title.className = "title";
     title.innerHTML = prize_name;
+
+    var edittitle = document.createElement("h2");
+    edittitle.className = "title";
+    edittitle.innerHTML = prize_name;
     
     var date = document.createElement("p");
     date.className = "date";
     date.innerHTML = (start.getMonth() + 1) + "/" + start.getDate() + "/" + start.getFullYear() + " to " + (end.getMonth() + 1) + "/" + end.getDate() + "/" + end.getFullYear() + ".";
     
+    var editdate = document.createElement("p");
+    editdate.className = "date";
+    editdate.innerHTML = (start.getMonth() + 1) + "/" + start.getDate() + "/" + start.getFullYear() + " to " + (end.getMonth() + 1) + "/" + end.getDate() + "/" + end.getFullYear() + ".";
+
     var col2 = document.createElement("div");
     col2.className = "col-sm-4";
+
+    var editcol2 = document.createElement("div");
+    editcol2.className = "col-sm-4";
 
     var pts = document.createElement("h1");
     pts.innerHTML = points + " pts";
     pts.className = "points";
 
+    var editpts = document.createElement("h1");
+    editpts.innerHTML = points + " pts";
+    editpts.className = "points";
+
     col2.appendChild(pts);
+    editcol2.appendChild(editpts);
 
     var button = document.createElement("button");
     button.innerHTML = "Purchase";
@@ -363,17 +386,31 @@ function loadPrize(snap) {
       purchase(this.id);
     });
 
+    var edit = document.createElement("button");
+    edit.innerHTML = "Edit";
+    edit.className = "btn btn-light";
+    edit.type = "button";
+    button.addEventListener("click", function() {
+        localStorage.setItem()
+        window.location.href = "edit-prize.html";
+    });
+
     col1.appendChild(title);
     col1.appendChild(date);
     col1.appendChild(button);
 
+    editcol.appendChild(edittitle);
+    editcol.appendChild(editdate);
+    editcol.appendChild(edit);
+
     row.appendChild(col1);
     row.appendChild(col2);
 
-    if ($('#prizes').length > 0) prizeContainer.appendChild(row);
+    editrow.appendChild(editcol);
+    editrow.appendChild(editcol2);
 
     $("#prizes").append(row);
-    $("#admin-prizes").append(row);
+    $("#admin-prizes").append(editrow);
 
 }
 
