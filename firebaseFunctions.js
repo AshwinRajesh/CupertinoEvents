@@ -225,15 +225,18 @@ function addPrize(title, start, end, points) {
     });
 }
 
+var distanceFromEvent = 0;
+var userLon = 0;
+var userLat = 0;
+
 function checkInToEvent(eventKey){
     var user = firebase.auth().currentUser;
     return firebase.database().ref('/').once('value').then(function (snapshot) {
         var users = snapshot.val().users;
         var user_points = parseInt(users[user.uid].points);
         var pointValue = parseInt(snapshot.val().events[eventKey].point_value);
-        var userLat = 0;
-        var userLon = 0;
-        var distanceFromEvent = 0;
+        userLat = parseFloat(snapshot.val().events[eventKey].lat);
+        userLon = parseFloat(snapshot.val().events[eventKey].lng);
         console.log(users[user.uid]);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(savePosition);
@@ -263,7 +266,7 @@ function checkInToEvent(eventKey){
                     }
                 });
                 localStorage.setItem("points", parseInt(localStorage.getItem("points")) + pointValue);
-                generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
+                generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + " points!");
             } else {
                 console.log("You are too far from the event to check in.");
                 generateAlert("#map_alerts", "danger", "You are too far from the event to check in!");
@@ -273,19 +276,15 @@ function checkInToEvent(eventKey){
 }
 
 function savePosition(position) {
-    userLat = position.coords.latitude;
-    userLon = position.coords.longitude;
-    position posEvent = firebase.database().ref('/events/' + eventkey).once('value').then(function (snapshot1) {snapshot.val().latitiude; snapshot.val().longitude;});
-    distanceFromEvent = findDistance(position, posEvent);
-    console.log("Latitude: " + userLat + "<br>Longitude: " + userLon + "<br>The distance between you and the event in miles is: " + distanceFromEvent);
+    distanceFromEvent = findDistance(userLat, userLon, position);
 }
 
-function findDistance(position1, position2){
-    var lat1 = position1.coords.latitude / (180 / (22/7));
-    var long1 = position1.coords.longitude / (180 / (22/7));
+function findDistance(lat, lng, position2){
+    var lat1 = lat / (180 / (22/7));
+    var long1 = lng / (180 / (22/7));
     var lat2 = position2.coords.latitude / (180 / (22/7));
     var long2 = position2.coords.longitude / (180 / (22/7));
-    var distance = 3963.0 * math.acos( (math.sin(lat1) * math.sin(lat2)) + math.cos(lat1) * math.cos(lat2) * math.cos(long2 - long1) );
+    var distance = 3963.0 * Math.acos( (Math.sin(lat1) * Math.sin(lat2)) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(long2 - long1) );
     return distance;
 }
 
@@ -300,34 +299,59 @@ function generateAlert(id, color, message){
 }
 
 function addEventElement(snap){
+    var uid = firebase.auth().currentUser.uid;
     obj = snap.val();
     console.log(obj);
     var start = new Date(obj.start_time);
     var end = new Date(obj.end_time);
-    $("#eventList").append("<li id=\"" + obj.key + "_main\"class=\"list-group-item\">\n" +
+    var contentString = "";
+    var key = obj.key;
+    var name = obj.name;
+    var notes = obj.notes;
+    var points = obj.point_value;
+
+    addMarker(parseFloat(obj.latitude), parseFloat(obj.longitude), obj.name, obj.notes, start, end, obj.key);
+
+    return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
+        //var events = snapshot.val().user_events;
+        if(key in snapshot.val().user_events){
+            contentString = "<li id=\"" + key + "_main\"class=\"list-group-item\">\n" +
+        "            <h3>" + name + " <span style='color: #4e89ed'>" + points + "pts</span></h3>\n" +
+        "            <h5>" + notes + "</h5>\n" +
+        "            <h6>" + formatDate(start) + " to " + formatDate(end) + "</h6>\n" +    
+        "            <button id=\"" + key + "_button\" disabled class='btn btn-secondary'>Checked In</button>" +
+        "          </li>";
+        } else {
+            contentString = "<li id=\"" + key + "_main\"class=\"list-group-item\">\n" +
+        "            <h3>" + name + " <span style='color: #4e89ed'>" + points + "pts</span></h3>\n" +
+        "            <h5>" + notes + "</h5>\n" +
+        "            <h6>" + formatDate(start) + " to " + formatDate(end) + "</h6>\n" +    
+        "            <button id=\"" + key + "_button\" class='btn btn-primary'>Check In</button>" +
+        "          </li>";
+        }
+        $("#eventList").append(contentString);
+
+        $("#" + key + "_button").on("click", function() {
+            checkInToEvent(key);
+
+        });
+        
+
+        $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + obj.name + "<button id=\"" + obj.key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
+
+        $("#" + key + "_admin_button").on("click", function() {
+            editEvent(key);
+            window.location.href = "event.html";
+        });
+    });
+    /*$("#eventList").append("<li id=\"" + obj.key + "_main\"class=\"list-group-item\">\n" +
         "            <h3>" + obj.name + " <span style='color: #4e89ed'>" + obj.point_value + "pts</span></h3>\n" +
         "            <h5>" + obj.notes + "</h5>\n" +
         "            <h6>" + formatDate(start) + " to " + formatDate(end) + "</h6>\n" +    
         "            <button id=\"" + obj.key + "_button\" class='btn btn-primary'>Check In</button>" +
-        "          </li>");
+        "          </li>");*/
 
-    var key = obj.key;
-    var points = obj.point_value;
     
-    addMarker(parseFloat(obj.latitude), parseFloat(obj.longitude), obj.name, obj.notes, start, end, obj.key);
-
-    $("#" + key + "_button").on("click", function() {
-        checkInToEvent(key);
-    });
-    
-
-    $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + obj.name + "<button id=\"" + obj.key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
-
-    $("#" + key + "_admin_button").on("click", function() {
-        editEvent(key);
-        window.location.href = "event.html";
-    });
-
 }
 
 function removeEventElement(snap){
@@ -584,7 +608,6 @@ function saveEvent(eventKey, name, start, end, lat, lng, points, notes) {
 }
 
 function userEvents(uid) {
-    alert(uid);
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         var events = snapshot.val().user_events;
         var event_list = [];
@@ -599,7 +622,6 @@ function userEvents(uid) {
 }
 
 function userPrizes(uid) {
-    alert(uid);
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         var prizes = snapshot.val().prizes;
         var prize_list = [];
