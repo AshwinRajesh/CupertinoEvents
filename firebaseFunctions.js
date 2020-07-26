@@ -337,7 +337,7 @@ function addEventElement(snap){
         });
         
 
-        $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + obj.name + "<button id=\"" + obj.key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
+        $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + name + "<button id=\"" + key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
 
         $("#" + key + "_admin_button").on("click", function() {
             editEvent(key);
@@ -607,6 +607,7 @@ function saveEvent(eventKey, name, start, end, lat, lng, points, notes) {
 }
 
 function userEvents(uid) {
+    localStorage.setItem("event_list", "");
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         var events = snapshot.val().user_events;
         var event_list = [];
@@ -621,6 +622,7 @@ function userEvents(uid) {
 }
 
 function userPrizes(uid) {
+    localStorage.setItem("prize_list", "");
     return firebase.database().ref('/users/' + uid).once('value').then(function (snapshot) {
         var prizes = snapshot.val().prizes;
         var prize_list = [];
