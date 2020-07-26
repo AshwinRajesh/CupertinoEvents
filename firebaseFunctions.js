@@ -288,6 +288,8 @@ function addEventElement(snap){
     $("#" + key + "_button").on("click", function() {
         checkInToEvent(key);
     });
+
+    $("#recent_events_admin").append("<li class=\"list-group-item list-group-item-action\">" + obj.name + "<button id=\"" + obj.key + "_admin_button\" class=\"btn btn-primary\" style=\"float: right;\">Edit</button></li>");
     
 }
 
