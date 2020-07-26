@@ -233,6 +233,7 @@ function checkInToEvent(eventKey){
         var pointValue = parseInt(snapshot.val().events[eventKey].point_value);
         var userLat = 0;
         var userLon = 0;
+        var distanceFromEvent = 0;
         console.log(users[user.uid]);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(savePosition);
@@ -244,24 +245,29 @@ function checkInToEvent(eventKey){
             generateAlert("#map_alerts", "danger", "You have already checked in to this event!");
             return false;
         }else{
-            obj = users[user.uid].user_events;
-            obj[eventKey] = 0;
-            firebase.database().ref("users/" + user.uid + "/user_events").set(obj, function(error) {
-                if (error) {
-                    console.log(error.message);
-                } else {
-                    console.log("Data saved successfully!");
-                }
-            });
-            firebase.database().ref("users/" + user.uid).update({points: user_points + pointValue}, function(error) {
-                if (error) {
-                    console.log(error.message);
-                } else {
-                    console.log("Data saved successfully!");
-                }
-            });
-            localStorage.setItem("points", parseInt(localStorage.getItem("points")) + pointValue);
-            generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
+            if(distanceFromEvent < 5) {
+                obj = users[user.uid].user_events;
+                obj[eventKey] = 0;
+                firebase.database().ref("users/" + user.uid + "/user_events").set(obj, function(error) {
+                    if (error) {
+                        console.log(error.message);
+                    } else {
+                        console.log("Data saved successfully!");
+                    }
+                });
+                firebase.database().ref("users/" + user.uid).update({points: user_points + pointValue}, function(error) {
+                    if (error) {
+                        console.log(error.message);
+                    } else {
+                        console.log("Data saved successfully!");
+                    }
+                });
+                localStorage.setItem("points", parseInt(localStorage.getItem("points")) + pointValue);
+                generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
+            } else {
+                console.log("You are too far from the event to check in.");
+                generateAlert("#map_alerts", "danger", "You are too far from the event to check in!");
+            }
         }
     });
 }
@@ -270,8 +276,8 @@ function savePosition(position) {
     userLat = position.coords.latitude;
     userLon = position.coords.longitude;
     position posEvent = firebase.database().ref('/events/' + eventkey).once('value').then(function (snapshot1) {snapshot.val().latitiude; snapshot.val().longitude;});
-    distance = findDistance(position, posEvent);
-    console.log("Latitude: " + userLat + "<br>Longitude: " + userLon + "<br>The distance between you and the event in miles is: " + distance);
+    distanceFromEvent = findDistance(position, posEvent);
+    console.log("Latitude: " + userLat + "<br>Longitude: " + userLon + "<br>The distance between you and the event in miles is: " + distanceFromEvent);
 }
 
 function findDistance(position1, position2){
