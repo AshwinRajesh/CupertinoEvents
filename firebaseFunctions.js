@@ -231,7 +231,14 @@ function checkInToEvent(eventKey){
         var users = snapshot.val().users;
         var user_points = parseInt(users[user.uid].points);
         var pointValue = parseInt(snapshot.val().events[eventKey].point_value);
+        var userLat = 0;
+        var userLon = 0;
         console.log(users[user.uid]);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(savePosition);
+        } else { 
+            console.log("Geolocation is not supported by this browser.");
+        }
         if(eventKey in users[user.uid].user_events){
             console.log("Already checked in to this event");
             generateAlert("#map_alerts", "danger", "You have already checked in to this event!");
@@ -257,6 +264,23 @@ function checkInToEvent(eventKey){
             generateAlert("#map_alerts", "success", "Success!\nYou gained " + pointValue + "points!");
         }
     });
+}
+
+function savePosition(position) {
+    userLat = position.coords.latitude;
+    userLon = position.coords.longitude;
+    position posEvent = firebase.database().ref('/events/' + eventkey).once('value').then(function (snapshot1) {snapshot.val().latitiude; snapshot.val().longitude;});
+    distance = findDistance(position, posEvent);
+    console.log("Latitude: " + userLat + "<br>Longitude: " + userLon + "<br>The distance between you and the event in miles is: " + distance);
+}
+
+function findDistance(position1, position2){
+    var lat1 = position1.coords.latitude / (180 / (22/7));
+    var long1 = position1.coords.longitude / (180 / (22/7));
+    var lat2 = position2.coords.latitude / (180 / (22/7));
+    var long2 = position2.coords.longitude / (180 / (22/7));
+    var distance = 3963.0 * math.acos( (math.sin(lat1) * math.sin(lat2)) + math.cos(lat1) * math.cos(lat2) * math.cos(long2 - long1) );
+    return distance;
 }
 
 function generateAlert(id, color, message){
