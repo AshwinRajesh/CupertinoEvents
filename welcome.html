@@ -76,16 +76,12 @@
 
         <div class="col-sm-6 p-2">
           <h3 style="margin-bottom: 20px">Recent Events</h3>
-          <ul class="list-group" style="overflow: scroll; max-height: 300px" id="recent-events">
-            <a href="#" class="list-group-item list-group-item-action">First item</a>
-            <a href="#" class="list-group-item list-group-item-action">Second item</a>
-            <a href="#" class="list-group-item list-group-item-action">Third item</a>
-            <a href="#" class="list-group-item list-group-item-action">First item</a>
-            <a href="#" class="list-group-item list-group-item-action">Second item</a>
-            <a href="#" class="list-group-item list-group-item-action">Third item</a>
-            <a href="#" class="list-group-item list-group-item-action">First item</a>
-            <a href="#" class="list-group-item list-group-item-action">Second item</a>
-            <a href="#" class="list-group-item list-group-item-action">Third item</a>
+          <ul class="list-group" style="overflow: scroll; max-height: 300px; margin-bottom: 30px" id="recent-events">
+            
+          </ul>
+          <h3 style="margin-bottom: 20px">Prizes Purchased</h3>
+          <ul class="list-group" style="overflow: scroll; max-height: 300px" id="recent-prizes">
+            
           </ul>
         </div>
 
@@ -96,7 +92,22 @@
     window.onload = function() {
       document.getElementById("username").innerHTML = localStorage.getItem("username");
       document.getElementById("points").innerHTML = localStorage.getItem("points");
-      document.getElementById("events-attended").innerHTML = localStorage.getItem("events-attended");
+      var event_list = JSON.parse(localStorage.getItem("event_list"));
+      for (item in event_list) {
+        var list_item = document.createElement("li");
+        list_item.className = "list-group-item list-group-item-action";
+        list_item.innerHTML = event_list[item];
+        document.getElementById("recent-events").appendChild(list_item);
+      }
+
+      var prize_list = JSON.parse(localStorage.getItem("prize_list"));
+      for (item in prize_list) {
+        var list_item = document.createElement("li");
+        list_item.className = "list-group-item list-group-item-action";
+        list_item.innerHTML = prize_list[item];
+        document.getElementById("recent-prizes").appendChild(list_item);
+      }
+      document.getElementById("events-attended").innerHTML = event_list.length;
     }
   </script>
 </body>
